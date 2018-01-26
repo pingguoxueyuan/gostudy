@@ -1,0 +1,59 @@
+<html>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script>
+                $(document).ready(function(){
+                        /*
+                    $("#input_id").change(function(event){
+                        keyword = $(this).val();
+                        length = keyword.length
+                        if (length > 0) {
+                                alert(keyword)
+                            //$.getJSON("http://localhost:9090/school/search?keyword="+keyword,function(result){
+                            //       alert(result);
+                            //});
+                        }
+                    });
+                    */
+
+                    var flag = true;
+                    $('#input_id').on('compositionstart',function(){
+                        flag = false;
+                    })
+        
+                    $('#input_id').on('compositionend',function(){
+                        flag = true;
+                    })
+
+                    $('#input_id').on('input',function(){
+                        var _this = this;
+                        setTimeout(function(){
+                            if(!flag){
+                                return
+                            }
+                            
+                            keyword = $(_this).val()
+                            if (keyword.length == 0) {
+                                return
+                            }
+
+                            $.getJSON("http://localhost:9090/school/search?keyword="+keyword,function(result){
+                                if (result.code != 0) {
+                                        return
+                                }
+                                $("#suggest_id option").remove();
+                                $.each(result.data, function(key, val) {
+                                    $('#suggest_id').append("<option value='" + val.Name + "'>");
+                                });
+                            });
+                        },0)
+                    })
+                });
+        </script>
+        <body>
+                <div>
+                        <span> 请输入学校名字:</span>
+                        <input id="input_id" type="text" name="keyword" list="suggest_id"></input>
+                        <datalist id="suggest_id">
+                        </datalist>
+        </body>
+</html>
