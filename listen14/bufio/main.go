@@ -16,3 +16,7 @@ func main() {
 	str, _ = reader.ReadString('\n')
 	fmt.Println("read from bufio:", str)
 }
+
+func mytest() {
+	fmt.Println("this is a good day")
+}
