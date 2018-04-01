@@ -21,6 +21,7 @@ func transPostExpress(express string) (postExpress []string, err error) {
 LABEL:
 	for i < len(express) {
 		switch {
+		//35+27
 		case express[i] >= '0' && express[i] <= '9':
 			var number []byte
 			for ; i < len(express); i++ {

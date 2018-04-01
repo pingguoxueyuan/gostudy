@@ -1,23 +1,34 @@
 package main
 
 import (
-	"github.com/pingguoxueyuan/gostudy/listen17/log"
+	"time"
+
+	"github.com/pingguoxueyuan/gostudy/logger"
 )
 
-func main() {
-	/*
-		file := log.NewFileLog("c:/a.log")
-		file.LogDebug("this is a debug log")
-		file.LogWarn("this is a warn log")
-	*/
+func initLogger(name, logPath, logName string, level string) (err error) {
+	m := make(map[string]string, 8)
+	m["log_path"] = logPath
+	m["log_name"] = "user_server"
+	m["log_level"] = level
+	err = logger.InitLogger(name, m)
+	if err != nil {
+		return
+	}
 
-	/*
-		console := log.NewConsoleLog("xxxx")
-		console.LogConsoleDebug("this is a console log")
-		console.LogConsoleWarn("this is a warn log")
-	*/
-	//log := log.NewFileLog("c:/a.log")
-	log := log.NewConsoleLog("xxxx")
-	log.LogDebug("this is a debug file")
-	log.LogWarn("this is a warn log")
+	logger.Debug("init logger success")
+	return
+}
+
+func Run() {
+	for {
+		logger.Debug("user server is running")
+		time.Sleep(time.Second)
+	}
+}
+
+func main() {
+	initLogger("file", "c:/logs/", "user_server", "debug")
+	Run()
+	return
 }

@@ -3,32 +3,62 @@ package logger
 import (
 	"fmt"
 	"os"
-	"path"
-	"time"
+	"strconv"
 )
 
 //2018/3/26 0:01.383 DEBUG logDebug.go:29 this is a debug log
 //2006-01-02 15:04:05.999
 type FileLogger struct {
-	level    int
-	logPath  string
-	logName  string
-	file     *os.File
-	warnFile *os.File
+	level       int
+	logPath     string
+	logName     string
+	file        *os.File
+	warnFile    *os.File
+	LogDataChan chan *LogData
 }
 
-func NewFileLogger(level int, logPath, logName string) LogInterface {
-	logger := &FileLogger{
-		level:   level,
-		logPath: logPath,
-		logName: logName,
+func NewFileLogger(config map[string]string) (log LogInterface, err error) {
+	logPath, ok := config["log_path"]
+	if !ok {
+		err = fmt.Errorf("not found log_path ")
+		return
 	}
 
-	logger.init()
-	return logger
+	logName, ok := config["log_name"]
+	if !ok {
+		err = fmt.Errorf("not found log_name ")
+		return
+	}
+
+	logLevel, ok := config["log_level"]
+	if !ok {
+		err = fmt.Errorf("not found log_level ")
+		return
+	}
+
+	logChanSize, ok := config["log_chan_size"]
+	if !ok {
+		logChanSize = "50000"
+	}
+
+	chanSize, err := strconv.Atoi(logChanSize)
+	if err != nil {
+		chanSize = 50000
+	}
+
+	level := getLogLevel(logLevel)
+	log = &FileLogger{
+		level:       level,
+		logPath:     logPath,
+		logName:     logName,
+		LogDataChan: make(chan *LogData, chanSize),
+	}
+
+	log.Init()
+	return
 }
 
-func (f *FileLogger) init() {
+func (f *FileLogger) Init() {
 
 	filename := fmt.Sprintf("%s/%s.log", f.logPath, f.logName)
 	file, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0755)
@@ -46,6 +76,19 @@ func (f *FileLogger) init() {
 	}
 
 	f.warnFile = file
+	go f.writeLogBackground()
+}
+
+func (f *FileLogger) writeLogBackground() {
+	for logData := range f.LogDataChan {
+		var file *os.File = f.file
+		if logData.WarnAndFatal {
+			file = f.warnFile
+		}
+
+		fmt.Fprintf(file, "%s %s (%s:%s:%d) %s\n", logData.TimeStr,
+			logData.LevelStr, logData.Filename, logData.FuncName, logData.LineNo, logData.Message)
+	}
 }
 
 func (f *FileLogger) SetLevel(level int) {
@@ -55,45 +98,74 @@ func (f *FileLogger) SetLevel(level int) {
 	f.level = level
 }
 
-func (f *FileLogger) writeLog(file *os.File, level int, format string, args ...interface{}) {
-	if f.level > level {
+func (f *FileLogger) Debug(format string, args ...interface{}) {
+	if f.level > LogLevelDebug {
 		return
 	}
 
-	now := time.Now()
-	nowStr := now.Format("2006-01-02 15:04:05.999")
-	levelStr := getLevelText(level)
-
-	fileName, funcName, lineNo := GetLineInfo()
-	fileName = path.Base(fileName)
-	funcName = path.Base(funcName)
-	msg := fmt.Sprintf(format, args...)
-
-	fmt.Fprintf(file, "%s %s (%s:%s:%d) %s\n", nowStr, levelStr, fileName, funcName, lineNo, msg)
-}
-
-func (f *FileLogger) Debug(format string, args ...interface{}) {
-	f.writeLog(f.file, LogLevelDebug, format, args...)
+	logData := writeLog(LogLevelDebug, format, args...)
+	select {
+	case f.LogDataChan <- logData:
+	default:
+	}
 }
 
 func (f *FileLogger) Trace(format string, args ...interface{}) {
-	f.writeLog(f.file, LogLevelTrace, format, args...)
+	if f.level > LogLevelTrace {
+		return
+	}
+	logData := writeLog(LogLevelTrace, format, args...)
+	select {
+	case f.LogDataChan <- logData:
+	default:
+	}
 }
 
 func (f *FileLogger) Info(format string, args ...interface{}) {
-	f.writeLog(f.file, LogLevelInfo, format, args...)
+	if f.level > LogLevelInfo {
+		return
+	}
+	logData := writeLog(LogLevelInfo, format, args...)
+	select {
+	case f.LogDataChan <- logData:
+	default:
+	}
 }
 
 func (f *FileLogger) Warn(format string, args ...interface{}) {
-	f.writeLog(f.warnFile, LogLevelWarn, format, args...)
+	if f.level > LogLevelWarn {
+		return
+	}
+
+	logData := writeLog(LogLevelWarn, format, args...)
+	select {
+	case f.LogDataChan <- logData:
+	default:
+	}
 }
 
 func (f *FileLogger) Error(format string, args ...interface{}) {
-	f.writeLog(f.warnFile, LogLevelError, format, args...)
+	if f.level > LogLevelError {
+		return
+	}
+
+	logData := writeLog(LogLevelError, format, args...)
+	select {
+	case f.LogDataChan <- logData:
+	default:
+	}
 }
 
 func (f *FileLogger) Fatal(format string, args ...interface{}) {
-	f.writeLog(f.warnFile, LogLevelFatal, format, args...)
+	if f.level > LogLevelFatal {
+		return
+	}
+
+	logData := writeLog(LogLevelFatal, format, args...)
+	select {
+	case f.LogDataChan <- logData:
+	default:
+	}
 }
 
 func (f *FileLogger) Close() {
