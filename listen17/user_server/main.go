@@ -11,6 +11,7 @@ func initLogger(name, logPath, logName string, level string) (err error) {
 	m["log_path"] = logPath
 	m["log_name"] = "user_server"
 	m["log_level"] = level
+	m["log_split_type"] = "size"
 	err = logger.InitLogger(name, m)
 	if err != nil {
 		return
@@ -22,7 +23,7 @@ func initLogger(name, logPath, logName string, level string) (err error) {
 
 func Run() {
 	for {
-		logger.Debug("user server is running")
+		logger.Debug("user server is running, :\\project\\src\\github.com\\pingguoxueyuan\\gostudy\\listen17\\user_server")
 		time.Sleep(time.Second)
 	}
 }
