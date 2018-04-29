@@ -26,6 +26,9 @@ func main() {
 	for {
 		n, err := reader.Read(buf[:])
 		if err == io.EOF {
+			if n != 0 {
+				content = append(content, buf[:n]...)
+			}
 			break
 		}
 
