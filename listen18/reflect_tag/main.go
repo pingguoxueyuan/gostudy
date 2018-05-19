@@ -34,4 +34,6 @@ func main() {
 	fmt.Printf("tag db=%s\n", field0.Tag.Get("db"))
 
 	//json.UnMa
+	var s string
+
 }
