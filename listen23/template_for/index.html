@@ -1,0 +1,16 @@
+<html>
+<head>
+</head>
+<body>
+    <table border="1px">
+{{range .}}
+
+{{if gt .Age 18}}
+    <tr><td background="#323423"><p>hello, old man, {{.Name}}</p></td></tr>
+{{else}}
+    <tr><td><p>hello,young man, {{.Name}}</p></td></tr>
+{{end}}
+{{end}}
+</table>
+</body>
+</html>

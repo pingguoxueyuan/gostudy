@@ -1,0 +1,14 @@
+<html>
+    <head>
+    <title></title>
+    </head>
+    <body>
+    <div>hello, {{.}}</div>
+    <div>name: {{.Name}}</div>
+    <div>sex: {{.Sex}}</div>
+    <div>age: {{.Age}}</div>
+    {{with .Address}}
+    <div>address: {{.Province}}  {{.City}}</div>
+    {{end}}
+    </body>
+    </html>
