@@ -29,15 +29,27 @@ func startChild(file *os.File) {
 
 func init() {
 	child = flag.Bool("child", false, "继承于父进程(internal use only)")
+	flag.Parse()
 }
 
 func readFromParent() {
+	//fd = 0: 标准输出
+	//fd = 1:标准输入
+	//fd = 2: 标准错误输出
+	//fd = 3=====>ExtraFiles[0]
+	//fd = 4=====>ExtraFiles[1]
 	f := os.NewFile(3, "")
 	count := 0
 	for {
 		str := fmt.Sprintf("hello, i'child process, write:%d line\n", count)
 		count++
-		f.WriteString(str)
+		_, err := f.WriteString(str)
+		if err != nil {
+
+			fmt.Printf("write string failed, err:%v\n", err)
+			time.Sleep(time.Second)
+			continue
+		}
 		time.Sleep(time.Second)
 	}
 }
@@ -49,12 +61,18 @@ func main() {
 		return
 	}
 	//父进程的逻辑
-	file, err := os.OpenFile("c:/tmp/test_inherit.log", os.O_APPEND|os.O_CREATE, 0766)
+	file, err := os.OpenFile("/tmp/test_inherit.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		fmt.Printf("open file failed, err:%v\n", err)
 		return
 	}
 
+	_, err = file.WriteString("paraent wirte one line\n")
+	if err != nil {
+		fmt.Printf("parent write failed, err:%v\n", err)
+		return
+	}
+
 	startChild(file)
-	fmt.Printf("parant exited")
+	fmt.Printf("parant exited\n")
 }
