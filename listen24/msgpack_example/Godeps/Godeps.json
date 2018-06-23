@@ -1,0 +1,17 @@
+{
+	"ImportPath": "github.com/pingguoxueyuan/gostudy/listen24/msgpack_example",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/vmihailenco/msgpack",
+			"Comment": "v3.3.3",
+			"Rev": "b5e691b1eb52a28c05e67ab9df303626c095c23b"
+		},
+		{
+			"ImportPath": "github.com/vmihailenco/msgpack/codes",
+			"Comment": "v3.3.3",
+			"Rev": "b5e691b1eb52a28c05e67ab9df303626c095c23b"
+		}
+	]
+}
