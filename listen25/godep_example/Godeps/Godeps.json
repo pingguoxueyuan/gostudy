@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/pingguoxueyuan/gostudy/listen25/godep_example",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/pingguoxueyuan/gostudy/listen6/calc",
+			"Rev": "a04073587838832ac49aea7f02c8bab56f195b5a"
+		}
+	]
+}

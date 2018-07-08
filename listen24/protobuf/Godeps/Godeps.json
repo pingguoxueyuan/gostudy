@@ -1,0 +1,12 @@
+{
+	"ImportPath": "github.com/pingguoxueyuan/gostudy/listen24/protobuf",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Comment": "v1.1.0-13-g9eb2c01",
+			"Rev": "9eb2c01ac278a5d89ce4b2be68fe4500955d8179"
+		}
+	]
+}
