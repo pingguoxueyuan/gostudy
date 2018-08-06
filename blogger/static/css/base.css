@@ -1,0 +1,62 @@
+@charset "gb2312";
+/* 共用css */
+* { margin: 0; padding: 0 }
+body { font: 14px "微软雅黑", Arial, Helvetica, sans-serif; color: #555; background:#f7f7f7; }
+img { border: 0; display: block }
+ul, li { list-style: none; }
+/*默认链接颜色 */
+a { text-decoration: none; color: #555 }
+.clear { clear: both; }
+.blank { height: 8px; overflow: hidden; width: 100%; margin: auto; clear: both }
+.blank80 { height: 100px; overflow: hidden; width: 100%; margin: auto; clear: both }
+.f_l { float: left }
+.f_r { float: right }
+.mt20 { margin-top: 20px }
+header { width: 100%; background: rgba(255,255,255,1); }
+article { overflow: hidden }
+.tophead { width: 1200px; margin: 0 auto 10px; overflow: hidden; }
+/* nav */
+.logo { float: left; overflow: hidden; font-size: 30px; margin-top: 10px; margin-left: 10px }
+.logo a { color: #333 }
+.logo img { float: left }
+.topnav { overflow: hidden; margin: 10px 0; }
+nav { color: #999; line-height: 32px; }
+nav ul { text-align: right; }
+nav ul li { display: inline; font-size: 16px; padding: 10px 20px; height: 46px; line-height: 46px; }
+/*导航当前页*/
+#topnav_current { color: #000; border-bottom: #333 2px solid; padding-bottom: 10px; }
+/*phone  nav */
+#mnav { display: none; width: 100%; }
+#mnav h2 { text-align: right; color: #fff; font-size: 18px; height: 52px; line-height: 52px; padding-left: 10px; width: 100% }
+#mnav h2.open { text-align: right; background: rgba(1,1,1,0.8); width: 100%; }
+#mnav ul { display: none; background: rgba(1,1,1,0.8); width: 100%; padding-bottom: 40px }
+#mnav li { height: 40px; line-height: 40px; vertical-align: top; font-size: 16px; display: block; overflow: hidden; text-align: center }
+#mnav li a { color: #fff }
+/* 默认菜单栏 */
+#mnav h2 .navicon { margin-right: 15px; }
+.navicon { display: inline-block; position: relative; width: 30px; height: 5px; background-color: #FFFFFF; }
+.navicon:before, .navicon:after { content: ''; display: block; width: 30px; height: 5px; position: absolute; background: #FFFFFF; -webkit-transition-property: margin, -webkit-transform; transition-property: margin, -webkit-transform; transition-property: margin, transform; transition-property: margin, transform, -webkit-transform; -webkit-transition-duration: 300ms; transition-duration: 300ms; }
+.navicon:before { margin-top: -10px; }
+.navicon:after { margin-top: 10px; }
+/* 展开后导航栏目 */
+#mnav h2.open .navicon { background: none }/* 隐藏中线 */
+#mnav h2.open .navicon:before { margin-top: 0; -webkit-transform: rotate(45deg); transform: rotate(45deg); }
+#mnav h2.open .navicon:after { margin-top: 0; -webkit-transform: rotate(-45deg); transform: rotate(-45deg); }
+#mnav h2.open .navicon:before, #mnav h2.open .navicon:after { content: ''; display: block; width: 30px; height: 5px; position: absolute; background: #FFFFFF; -webkit-transition-property: margin, -webkit-transform; transition-property: margin, -webkit-transform; transition-property: margin, transform; transition-property: margin, transform, -webkit-transform; -webkit-transition-duration: 300ms; transition-duration: 300ms; }
+footer { width: 100%; background: #333; color: #a5a4a4; text-align: center; padding: 20px 0; }
+footer a { color: #a5a4a4 }
+/* 分页 */
+.pagelist { text-align: center; color: #666; width: 100%; clear: both; margin: 20px 0; padding-top: 20px }
+.pagelist a { color: #666; margin: 0 2px; border: 1px solid #000; padding: 5px 10px; }
+.pagelist a:hover { color: #f00; text-decoration: underline }
+.pagelist > b { border: 1px solid #000; padding: 5px 10px; }
+/*content*/
+
+h1.t_nav span { float: right; color: #999 }
+h1.t_nav { border-bottom: #bfbfbf 1px solid; font-size: 14px; font-weight: normal; line-height: 40px; width: 100%; overflow: hidden }
+h1.t_nav a { width: 100px; display: block; text-align: center; color: #fff; float: left }
+.n1 { background: #5EA51B; }
+.n2 { background: #8BBF5D; }
+.litle { font-size: 20px; margin: 20px 0 0 0; border-bottom: #d6d5d5 1px solid; padding-bottom: 5px; padding: 10px 0 10px 100px; color: #000; background: url(../images/jdbg.png) no-repeat left center; }
+.litle span { float: right; font-size: 14px; color: #666; font-weight: normal }
+.ab_box { padding: 20px; overflow: hidden; background: rgba(255,255,255,1); margin-top: 20px }

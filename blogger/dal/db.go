@@ -2,7 +2,6 @@ package dal
 
 import (
 	"fmt"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -25,16 +24,6 @@ func Init(dns string) error {
 	return nil
 }
 
-type Article struct {
-	Id           int64     `db:"id"`
-	Content      string    `db:"content"`
-	Title        string    `db:"title"`
-	ViewCount    uint32    `db:"view_count"`
-	CreateTime   time.Time `db:"create_time"`
-	CommentCount uint32    `db:"comment_count"`
-	Username     string    `db:"username"`
-}
-
 func InsertArticle(article *model.Article) (articleId int64, err error) {
 
 	sqlstr := "insert into article(content, title, username)values(?,?,?)"
@@ -47,7 +36,7 @@ func InsertArticle(article *model.Article) (articleId int64, err error) {
 	return
 }
 
-func GetArticleList(pageNum, pageSize int) (articleList []*Article, err error) {
+func GetArticleList(pageNum, pageSize int) (articleList []*model.Article, err error) {
 
 	if pageNum < 0 || pageSize < 0 {
 		err = fmt.Errorf("invalid parameter, page_num:%d, page_size:%d", pageNum, pageSize)
@@ -64,5 +53,90 @@ func GetArticleList(pageNum, pageSize int) (articleList []*Article, err error) {
 				limit ?, ?`
 
 	err = DB.Select(&articleList, sqlstr, pageNum, pageSize)
+	return
+}
+
+func InsertComment(comment *model.Comment) (err error) {
+
+	if comment == nil {
+		err = fmt.Errorf("invalid parameter")
+		return
+	}
+
+	tx, err := DB.Beginx()
+	if err != nil {
+		return
+	}
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+	}()
+
+	sqlstr := `insert 
+					into comment(
+						Content, Username, ArticleId					
+					)
+				values (
+						?, ?, ?
+				)`
+
+	_, err = tx.Exec(sqlstr, comment.Content, comment.Username, comment.ArticleId)
+	if err != nil {
+		return
+	}
+
+	sqlstr = `  update 
+					article 
+				set 
+					comment_count = comment_count + 1
+				where
+					id = ?`
+
+	_, err = tx.Exec(sqlstr, comment.ArticleId)
+	if err != nil {
+		return
+	}
+
+	err = tx.Commit()
+	return
+}
+
+func UpdateViewCount(articleId int64) (err error) {
+
+	sqlstr := ` update 
+					article 
+				set 
+					comment_count = comment_count + 1
+				where
+					id = ?`
+
+	_, err = DB.Exec(sqlstr, articleId)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func GetCommentList(articleId int64, pageNum, pageSize int) (commentList []*model.Comment, err error) {
+
+	if pageNum < 0 || pageSize < 0 {
+		err = fmt.Errorf("invalid parameter, page_num:%d, page_size:%d", pageNum, pageSize)
+		return
+	}
+
+	sqlstr := `select 
+						id, content, username, create_time
+					from 
+						comment 
+					where 
+						article_id = ? and 
+						status = 1
+					limit ?, ?`
+
+	err = DB.Select(&commentList, sqlstr, articleId, pageNum, pageSize)
 	return
 }

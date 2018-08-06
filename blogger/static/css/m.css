@@ -1,0 +1,104 @@
+ @charset "gb2312";
+
+/* 大于960px，小于1199px */ 
+ @media screen and (min-width: 960px) and (max-width: 1199px) {
+header, .tophead, article { width: 100% }
+nav ul li { padding: 10px 10px; }
+.picshow li i { overflow: hidden; display: block; height: 400px; }
+.picshow .font { display: none }
+.text img { width: 100% }
+.rightbox { margin-right: 0 }
+.picbox { width: 72%; }
+.picbox ul { width: 32%; margin-right: 0 }
+.picbox ul:nth-child(2) { margin: 0 5px }
+}
+ 
+ /* 大于768px，小于959px */ 
+ @media screen and (min-width: 768px) and (max-width: 959px) {
+header, .tophead, article { width: 100% }
+nav ul li { padding: 10px 5px; }
+.blogs { width: 65% }
+.sidebar { width: 33% }
+.picshow li i { overflow: hidden; display: block; height: 300px; }
+.picshow .font { display: none }
+.text img { width: 100% }
+.news_infos img { width: 100% }
+h3.blogtitle { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.picbox { width: 67%; }
+.picbox ul { width: 32%; margin-right: 0 }
+.picbox ul:nth-child(2) { margin: 0 5px }
+.paihang li i { width: 98% }
+.infos { width: 65%; }
+.ad { display: none }
+}
+ 
+ 
+/* 大于480px，小于767px */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+header, .tophead, article { width: 100% }
+header { height: 66px; margin-bottom: 10px; }
+nav { display: none; }
+#mnav { display: block; position: fixed; z-index: 999999; }
+.navicon, .navicon:before, .navicon:after { background: #000 }
+#mnav h2 #mnav h2.open .navicon { background: rgba(1,1,1,0) }/* 使用背景色隐藏中间的线 */
+.picshow li i { overflow: hidden; display: block; height: 200px; }
+.picshow .font, .litle span { display: none }
+.text img { width: 100% }
+.blogs { width: 62% }
+.sidebar { width: 36% }
+.rightbox { width: 40%; }
+.leftbox { width: 60% }
+.news_infos img { width: 100% }
+.blogpic { width: 100%; height: 150px; display: block }
+h3.blogtitle { clear: both; padding-top: 10px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.readmore { display: block; overflow: hidden; width: 100%; text-align: center; background: #f2f2f2; padding: 10px 0; margin-top: 10px; clear: both }
+.paihang li i { width: 98% }
+.picbox { width: 64%; }
+.picbox ul { width: 32%; margin-right: 0 }
+.picbox ul:nth-child(2) { margin: 0 5px }
+h1.t_nav span { display: none }
+.infos { width: 62%; }
+.ad { display: none }
+}
+@media only screen and (min-width: 360px) and (max-width: 479px) {
+header, .tophead, article, .leftbox, .sidebar, .blogs { width: 100% }
+header { height: 66px; margin-bottom: 10px; }
+nav, .litle span { display: none; }
+#mnav { display: block; position: fixed; z-index: 999999; }
+.navicon, .navicon:before, .navicon:after { background: #000 }
+#mnav h2 #mnav h2.open .navicon { background: rgba(1,1,1,0) }/* 使用背景色隐藏中间的线 */
+.picshow li i { overflow: hidden; display: block; height: 100px; }
+.picshow .font { display: none }
+.text img { width: 100% }
+.news_infos img { width: 100% }
+.rightbox { width: 100%; }
+.blogpic { width: 100%; height: 150px; display: block }
+h3.blogtitle { clear: both; padding-top: 10px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.readmore { display: block; overflow: hidden; width: 100%; text-align: center; background: #f2f2f2; padding: 10px 0; margin-top: 10px; clear: both }
+.picbox { width: 100% }
+.picbox ul { width: 100%; margin: 0 }
+h1.t_nav span { display: none }
+.infos { width: 100%; }
+.ad { display: none }
+}
+@media only screen and (max-width: 359px) {
+header, .tophead, article, .leftbox, .sidebar, .blogs { width: 100% }
+header { height: 66px; margin-bottom: 10px; }
+nav, .litle span { display: none; }
+#mnav { display: block; position: fixed; z-index: 999999; }
+.navicon, .navicon:before, .navicon:after { background: #000 }
+#mnav h2 #mnav h2.open .navicon { background: rgba(1,1,1,0) }/* 使用背景色隐藏中间的线 */
+.picshow li i { overflow: hidden; display: block; height: 100px; }
+.picshow .font { display: none }
+.text img { width: 100% }
+.rightbox { width: 100%; }
+.news_infos img { width: 100% }
+.blogpic { width: 100%; height: 150px; display: block }
+h3.blogtitle { clear: both; padding-top: 10px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.readmore { display: block; overflow: hidden; width: 100%; text-align: center; background: #f2f2f2; padding: 10px 0; margin-top: 10px; clear: both }
+.picbox { width: 100% }
+.picbox ul { width: 100%; margin: 0 }
+h1.t_nav span { display: none }
+.infos { width: 100%; }
+.ad { display: none }
+}

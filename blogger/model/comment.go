@@ -10,4 +10,5 @@ type Comment struct {
 	Username   string    `db:"username"`
 	CreateTime time.Time `db:"create_time"`
 	Status     int       `db:"status"`
+	ArticleId  int64     `db:"article_id"`
 }

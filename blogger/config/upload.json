@@ -1,0 +1,13 @@
+{
+    "imageUrl":"http://localhost/ueditor/php/controller.php?action=uploadimage",
+    "imagePath":"/ueditor/php/",
+    "imageFieldName":"upfile",
+    "imageMaxSize":2048,
+    "imageAllowFiles":[
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".bmp"
+    ]
+}
