@@ -1,0 +1,80 @@
+{{ define "views/post_article.html" }}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CKEditor</title>
+		<script src="/static/ckeditor5-build-classic/ckeditor.js"></script>
+		<title>首页_杨青个人博客 - 一个站在web前端设计之路的女技术员个人博客网站</title>
+		<meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
+		<meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="/static/css/base.css" rel="stylesheet">
+		<link href="/static/css/index.css" rel="stylesheet">
+		<link href="/static/css/m.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+		<div class="tophead">
+			<div class="logo"><a href="/">杨青个人博客</a></div>
+			
+			<nav class="topnav" id="topnav">
+					<ul>
+					  <li><a href="/">网站首页</a></li>
+					  <li><a href="/article/new/">投稿</a></li>
+					  <li><a href="/leave/new/">留言</a></li>
+					  <li><a href="/about/me/">关于我</a></li>
+					</ul>
+				  </nav>
+		</div>
+		</header>
+		<form action="/article/submit/" method="post">
+		<div style="margin:auto;height:40px;width:80%; line-height:40px">
+			<label for="author" >姓名 <span class="required">*</span></label>
+			<input id="author" name="author" type="text" value="" size="30" maxlength="245" required="required">
+		</div> 
+		<div style="margin:auto;height:40px;width:80%; line-height:40px">
+				<label for="author" >文章标题 <span class="required">*</span></label>
+				<input id="author" name="title" type="text" value="" size="30" maxlength="245" required="required">
+			</div> 
+		<div style="margin:auto;width:80%;align:center;">
+				<label for="author" style="margin:0px 0px 0px 0px;line-height:40px;">文章分类 <span class="required">*</span></label>
+				<select name="category_id">
+					{{range .}} 
+						<option value="{{.CategoryId}}">{{.CategoryName}}</option>
+					{{end}}					
+				</select>
+		</div>
+		<div style="margin:auto;width:80%;align:center;">
+				<label for="author" style="margin:0px 0px 0px 0px;line-height:40px;">文章内容 <span class="required">*</span></label>
+				<textarea name="content" id="editor" style="width:80%">This is some sample content.</textarea>
+		</div>
+		<div  style="margin:auto;height:40px;width:80%; line-height:40px">
+		<input type="submit" value="发表文章">
+		</div>
+		<script>
+			ClassicEditor
+				.create(document.querySelector('#editor'),{
+                        ckfinder: {
+							uploadUrl : '/upload/file/'
+                            //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
+                        }
+                    } )
+				.then( editor => {
+					console.log( editor );
+				} )
+				.catch( error => {
+					console.error( error );
+				} );
+				
+		</script>
+		<style>
+            .ck-editor__editable {
+				min-height: 320px;
+            }
+		</style>
+		</script>
+	</form>
+	</body>
+</html>
+{{end}}

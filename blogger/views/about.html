@@ -1,3 +1,4 @@
+{{ define "views/about.html" }}
 <!doctype html>
 <html>
 <head>
@@ -6,9 +7,9 @@
 <meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
 <meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="css/base.css" rel="stylesheet">
-<link href="css/index.css" rel="stylesheet">
-<link href="css/m.css" rel="stylesheet">
+<link href="/static/css/base.css" rel="stylesheet">
+<link href="/static/css/index.css" rel="stylesheet">
+<link href="/static/css/m.css" rel="stylesheet">
 <!--[if lt IE 9]>
 <script src="js/modernizr.js"></script>
 <![endif]-->
@@ -30,31 +31,23 @@ window.onload = function ()
 <header>
   <div class="tophead">
     <div class="logo"><a href="/">杨青个人博客</a></div>
-    <div id="mnav">
-      <h2><span class="navicon"></span></h2>
-      <ul>
-        <li><a href="index.html">网站首页</a></li>
-        <li><a href="about.html">关于我</a></li>
-        <li><a href="share.html">模板分享</a></li>
-        <li><a href="list.html">学无止境</a></li>
-        <li><a href="info.html">慢生活</a></li>
-        <li><a href="gbook.html">留言</a></li>
-      </ul>
-    </div>
+    
     <nav class="topnav" id="topnav">
-      <ul>
-        <li><a href="index.html">网站首页</a></li>
-        <li><a href="about.html">关于我</a></li>
-        <li><a href="share.html">模板分享</a></li>
-        <li><a href="list.html">学无止境</a></li>
-        <li><a href="info.html">慢生活</a></li>
-        <li><a href="gbook.html">留言</a></li>
-      </ul>
-    </nav>
+        <ul>
+          <li><a href="/">网站首页</a></li>
+          <li><a href="/article/new/">投稿</a></li>
+          <li><a href="/leave/new/">留言</a></li>
+          <li><a href="/about/me/">关于我</a></li>
+        </ul>
+      </nav>
   </div>
 </header>
 <article>
-  <h1 class="t_nav"><span>像“草根”一样，紧贴着地面，低调的存在，冬去春来，枯荣无恙。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">关于我</a></h1>
+  <h1 class="t_nav">
+    <span>像“草根”一样，紧贴着地面，低调的存在，冬去春来，枯荣无恙。</span>
+    <a href="/" class="n1">网站首页</a>
+    <a href="/about/me/" class="n2">关于我</a>
+  </h1>
   <div class="ab_box">
     <div class="leftbox">
       <div class="newsview">
@@ -84,7 +77,7 @@ window.onload = function ()
     <div class="rightbox">
       <div class="aboutme">
         <h2 class="hometitle">关于我</h2>
-        <div class="avatar"> <img src="images/avatar.jpg"> </div>
+        <div class="avatar"> <img src="/static/images/avatar.jpg"> </div>
         <div class="ab_con">
           <p>网名：dancesmile | 杨青</p>
           <p>职业：Web前端设计师、网页设计 </p>
@@ -95,7 +88,7 @@ window.onload = function ()
       <div class="weixin">
         <h2 class="hometitle">微信关注</h2>
         <ul>
-          <img src="images/wx.jpg">
+          <img src="/static/images/wx.jpg">
         </ul>
       </div>
     </div>
@@ -107,3 +100,4 @@ window.onload = function ()
 <script src="js/nav.js"></script>
 </body>
 </html>
+{{end}}

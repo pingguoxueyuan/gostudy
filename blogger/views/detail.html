@@ -1,0 +1,136 @@
+{{ define "views/detail.html" }}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf8">
+<title>首页_杨青个人博客 - 一个站在web前端设计之路的女技术员个人博客网站</title>
+<meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
+<meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/static/css/base.css" rel="stylesheet">
+<link href="/static/css/index.css" rel="stylesheet">
+<link href="/static/css/m.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+  var oH2 = document.getElementsByTagName("h2")[0];
+  var oUl = document.getElementsByTagName("ul")[0];
+  oH2.onclick = function ()
+  {
+    var style = oUl.style;
+    style.display = style.display == "block" ? "none" : "block";
+    oH2.className = style.display == "block" ? "open" : ""
+  }
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+    <div class="logo"><a href="/">苹果学院博客</a></div>
+    
+    <nav class="topnav" id="topnav">
+      <ul>
+        <li><a href="/">网站首页</a></li>
+        <li><a href="/article/new/">投稿</a></li>
+        <li><a href="/leave/new/">留言</a></li>
+        <li><a href="/about/me/">关于我</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<article>
+  <h1 class="t_nav"><span>您现在的位置是：首页 > {{.CategoryName}}</span>
+  </h1>
+  <div class="infos">
+    <div class="newsview">
+      <h3 class="news_title">{{.Title}}</h3>
+      <div class="news_author">
+        <span class="au01">
+          <a href="mailto:dancesmiling@qq.com">{{.Username}}</a>
+        </span><span class="au02">{{.CreateTime}}</span>
+           <span class="au03">共<b>
+             <script src="/view/add_count/?article_id={{.Id}}}">
+             </script>{{.ViewCount}}</b>人围观</span>
+             </div>
+      
+      
+      <div class="news_infos">{{.Content}}</div>
+    </div>
+    <div class="share"> </div>
+    <div class="nextinfo">
+      <p>上一篇：
+        <a href="/article/detail/?article_id=1">有些人，你永远不必等</a>
+      </p>
+      <p>下一篇：<a href="/news/life/">返回列表</a></p>
+    </div>
+    <div class="otherlink">
+      <h2>相关文章</h2>
+      <ul>
+        <li><a href="/download/div/2018-04-22/815.html" title="html5个人博客模板《黑色格调》">html5个人博客模板《黑色格调》</a></li>
+        <li><a href="/download/div/2018-04-18/814.html" title="html5个人博客模板主题《清雅》">html5个人博客模板主题《清雅》</a></li>
+        <li><a href="/download/div/2018-03-18/807.html" title="html5个人博客模板主题《绅士》">html5个人博客模板主题《绅士》</a></li>
+        <li><a href="/download/div/2018-02-22/798.html" title="html5时尚个人博客模板-技术门户型">html5时尚个人博客模板-技术门户型</a></li>
+        <li><a href="/download/div/2017-09-08/789.html" title="html5个人博客模板主题《心蓝时间轴》">html5个人博客模板主题《心蓝时间轴》</a></li>
+        <li><a href="/download/div/2017-07-16/785.html" title="古典个人博客模板《江南墨卷》">古典个人博客模板《江南墨卷》</a></li>
+        <li><a href="/download/div/2017-07-13/783.html" title="古典风格-个人博客模板">古典风格-个人博客模板</a></li>
+        <li><a href="/download/div/2015-06-28/748.html" title="个人博客《草根寻梦》—手机版模板">个人博客《草根寻梦》—手机版模板</a></li>
+        <li><a href="/download/div/2015-04-10/746.html" title="【活动作品】柠檬绿兔小白个人博客模板">【活动作品】柠檬绿兔小白个人博客模板</a></li>
+        <li><a href="/jstt/bj/2015-01-09/740.html" title="【匆匆那些年】总结个人博客经历的这四年…">【匆匆那些年】总结个人博客经历的这四年…</a></li>
+      </ul>
+    </div>
+    <div class="news_pl">
+      <h2>文章评论</h2>
+      <ul>
+        <div class="gbko"> </div>
+      </ul>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="lmnav">
+      <h2 class="hometitle">栏目导航</h2>
+      <ul class="navbor">
+        <li><a href="#">关于我</a></li>
+        <li><a href="list.html">学无止境</a>
+          <ul>
+            <li><a href="list.html">学习笔记</a></li>
+            <li><a href="#">HTML5+CSS3</a></li>
+            <li><a href="#">网站建设</a></li>
+          </ul>
+        </li>
+        <li><a href="#">慢生活</a></li>
+      </ul>
+    </div>   
+    <div class="weixin">
+      <h2 class="hometitle">官方微信</h2>
+      <ul>
+        <img src="/static/images/wx.jpg">
+      </ul>
+    </div>
+    <div class="ad" id="left_flow2"> <img src="/static/images/ad.jpg"> </div>
+  </div>
+</article>
+<footer>
+  <p>Design by <a href="/">杨青个人博客</a> <a href="/">蜀ICP备11002373号-1</a></p>
+</footer>
+<script src="js/nav.js"></script> 
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(function() { 
+    var elm = jQuery('#left_flow2'); 
+    var startPos = jQuery(elm).offset().top; 
+    jQuery.event.add(window, "scroll", function() { 
+        var p = jQuery(window).scrollTop(); 
+        jQuery(elm).css('position',((p) > startPos) ? 'fixed' : ''); 
+
+        jQuery(elm).css('top',((p) > startPos) ? '0' : '');
+    }); 
+}); 
+</script>
+</body>
+</html>
+{{end}}

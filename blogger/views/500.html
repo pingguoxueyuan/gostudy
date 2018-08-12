@@ -1,0 +1,57 @@
+{{ define "views/500.html" }}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf8">
+<title>关于_杨青个人博客 - 一个站在web前端设计之路的女技术员个人博客网站</title>
+<meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
+<meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/static/css/base.css" rel="stylesheet">
+<link href="/static/css/index.css" rel="stylesheet">
+<link href="/static/css/m.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementsByTagName("h2")[0];
+	var oUl = document.getElementsByTagName("ul")[0];
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+    <div class="logo"><a href="/">杨青个人博客</a></div>
+    
+    <nav class="topnav" id="topnav">
+        <ul>
+          <li><a href="/">网站首页</a></li>
+          <li><a href="/article/new/">投稿</a></li>
+          <li><a href="/leave/new/">留言</a></li>
+          <li><a href="/about/me/">关于我</a></li>
+        </ul>
+      </nav>
+  </div>
+</header>
+<article>
+  <h1 class="t_nav">
+    <span>http 500 internal error</span>
+    <a href="/" class="n1">点击刷新</a>
+  </h1>
+</article>
+<footer>
+  <p>Design by <a href="/">杨青个人博客</a> <a href="/">蜀ICP备11002373号-1</a></p>
+</footer>
+<script src="js/nav.js"></script>
+</body>
+</html>
+{{end}}
