@@ -32,3 +32,14 @@ func TestGetCategoryList(t *testing.T) {
 		t.Logf("id: %d category:%#v\n", v.CategoryId, v)
 	}
 }
+
+func TestGetCategoryById(t *testing.T) {
+
+	category, err := GetCategoryById(1)
+	if err != nil {
+		t.Errorf("get category  failed, err:%v\n", err)
+		return
+	}
+
+	t.Logf("category:%#v", category)
+}

@@ -64,6 +64,20 @@ func GetArticleRecordList(pageNum, pageSize int) (articleRecordList []*model.Art
 }
 
 func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err error) {
+
+	//1. 获取文章的信息
+	articleDetail, err = db.GetArticleDetail(articleId)
+	if err != nil {
+		return
+	}
+
+	//2. 获取文章对应的分类信息
+	category, err := db.GetCategoryById(articleDetail.ArticleInfo.CategoryId)
+	if err != nil {
+		return
+	}
+
+	articleDetail.Category = *category
 	return
 }
 

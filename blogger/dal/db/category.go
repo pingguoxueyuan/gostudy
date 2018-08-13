@@ -36,3 +36,12 @@ func GetAllCategoryList() (categoryList []*model.Category, err error) {
 	err = DB.Select(&categoryList, sqlstr)
 	return
 }
+
+func GetCategoryById(id int64) (category *model.Category, err error) {
+
+	category = &model.Category{}
+	sqlstr := "select id, category_name, category_no from category where id=?"
+	err = DB.Get(category, sqlstr, id)
+	return
+
+}

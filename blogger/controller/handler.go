@@ -75,6 +75,25 @@ func ArticleSubmit(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/")
 }
 
+func ArticleDetail(c *gin.Context) {
+
+	articleIdStr := c.Query("article_id")
+	articleId, err := strconv.ParseInt(articleIdStr, 10, 64)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "views/500.html", nil)
+		return
+	}
+
+	articleDetail, err := logic.GetArticleDetail(articleId)
+	if err != nil {
+		fmt.Printf("get article detail failed,article_id:%d err:%v\n", articleId, err)
+		c.HTML(http.StatusInternalServerError, "views/500.html", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "views/detail.html", articleDetail)
+}
+
 func UploadFile(c *gin.Context) {
 	// single file
 	file, err := c.FormFile("upload")

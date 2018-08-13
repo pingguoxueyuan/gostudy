@@ -20,7 +20,7 @@ func InsertArticle(article *model.ArticleDetail) (articleId int64, err error) {
 				values(?, ?, ?, ?, ?, ?, ?)`
 
 	result, err := DB.Exec(sqlstr, article.Content, article.Summary,
-		article.Title, article.Username, article.Category.CategoryId,
+		article.Title, article.Username, article.ArticleInfo.CategoryId,
 		article.ArticleInfo.ViewCount, article.ArticleInfo.CommentCount)
 	if err != nil {
 		return
@@ -48,5 +48,28 @@ func GetArticleList(pageNum, pageSize int) (articleList []*model.ArticleInfo, er
 					limit ?, ?`
 
 	err = DB.Select(&articleList, sqlstr, pageNum, pageSize)
+	return
+}
+
+func GetArticleDetail(articleId int64) (articleInfo *model.ArticleDetail, err error) {
+
+	if articleId < 0 {
+		err = fmt.Errorf("invalid parameter,article_id:%d", articleId)
+		return
+	}
+
+	articleInfo = &model.ArticleDetail{}
+	sqlstr := `select 
+							id, summary, title, view_count,content,
+							 create_time, comment_count, username, category_id
+						from 
+							article 
+						where 
+							id = ?
+						and
+							status = 1
+						`
+
+	err = DB.Get(articleInfo, sqlstr, articleId)
 	return
 }

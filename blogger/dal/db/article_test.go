@@ -50,3 +50,14 @@ func TestGetArticleList(t *testing.T) {
 
 	t.Logf("get article succ, len:%d\n", len(articleList))
 }
+
+func TestGetArticleInfo(t *testing.T) {
+
+	articleInfo, err := GetArticleDetail(7)
+	if err != nil {
+		t.Errorf("get article failed, err:%v\n", err)
+		return
+	}
+
+	t.Logf("get article succ, article:%#v\n", articleInfo)
+}
