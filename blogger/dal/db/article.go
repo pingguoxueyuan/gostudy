@@ -73,3 +73,17 @@ func GetArticleDetail(articleId int64) (articleInfo *model.ArticleDetail, err er
 	err = DB.Get(articleInfo, sqlstr, articleId)
 	return
 }
+
+func GetRelativeArticle(articleId int64) (articleList []*model.RelativeArticle, err error) {
+
+	var categoryId int64
+	sqlstr := "select category_id from article where id=?"
+	err = DB.Get(&categoryId, sqlstr, articleId)
+	if err != nil {
+		return
+	}
+
+	sqlstr = "select id, title from article where category_id=? and id !=?  limit 10"
+	err = DB.Select(&articleList, sqlstr, categoryId, articleId)
+	return
+}

@@ -91,7 +91,17 @@ func ArticleDetail(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "views/detail.html", articleDetail)
+	relativeArticle, err := logic.GetRelativeAricleList(articleId)
+	if err != nil {
+		fmt.Printf("get relative article failed, err:%v\n", err)
+	}
+
+	fmt.Printf("relative article size:%d article_id:%d\n", len(relativeArticle), articleId)
+	var m map[string]interface{} = make(map[string]interface{}, 10)
+	m["detail"] = articleDetail
+	m["relative_article"] = relativeArticle
+
+	c.HTML(http.StatusOK, "views/detail.html", m)
 }
 
 func UploadFile(c *gin.Context) {

@@ -61,3 +61,16 @@ func TestGetArticleInfo(t *testing.T) {
 
 	t.Logf("get article succ, article:%#v\n", articleInfo)
 }
+
+func TestGetRelativeArticle(t *testing.T) {
+
+	articleList, err := GetRelativeArticle(7)
+	if err != nil {
+		t.Errorf("get relative article failed, err:%v\n", err)
+		return
+	}
+
+	for _, v := range articleList {
+		t.Logf("id:%d title:%s\n", v.AritcleId, v.Title)
+	}
+}

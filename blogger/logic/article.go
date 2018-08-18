@@ -81,6 +81,12 @@ func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err 
 	return
 }
 
+func GetRelativeAricleList(articleId int64) (articleList []*model.RelativeArticle, err error) {
+
+	articleList, err = db.GetRelativeArticle(articleId)
+	return
+}
+
 /*
 	content := c.PostForm("content")
 	author := c.PostForm("author")
