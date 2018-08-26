@@ -71,6 +71,28 @@ func TestGetRelativeArticle(t *testing.T) {
 	}
 
 	for _, v := range articleList {
-		t.Logf("id:%d title:%s\n", v.AritcleId, v.Title)
+		t.Logf("id:%d title:%s\n", v.ArticleId, v.Title)
 	}
+}
+
+func TestGetPrevArticleById(t *testing.T) {
+
+	articelInfo, err := GetPrevArticleById(6)
+	if err != nil {
+		t.Errorf("get prev article failed, err:%v\n", err)
+		return
+	}
+
+	t.Logf("artice info:%#v", articelInfo)
+}
+
+func TestGetNextArticleById(t *testing.T) {
+
+	articelInfo, err := GetNextArticleById(6)
+	if err != nil {
+		t.Errorf("get prev article failed, err:%v\n", err)
+		return
+	}
+
+	t.Logf("artice info:%#v", articelInfo)
 }

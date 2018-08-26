@@ -96,10 +96,23 @@ func ArticleDetail(c *gin.Context) {
 		fmt.Printf("get relative article failed, err:%v\n", err)
 	}
 
+	prevArticle, nextArticle, err := logic.GetPrevAndNextArticleInfo(articleId)
+	if err != nil {
+		fmt.Printf("get prev or next article failed, err:%v\n", err)
+	}
+
+	allCategoryList, err := logic.GetAllCategoryList()
+	if err != nil {
+		fmt.Printf("get all category failed, err:%v\n", err)
+	}
+
 	fmt.Printf("relative article size:%d article_id:%d\n", len(relativeArticle), articleId)
 	var m map[string]interface{} = make(map[string]interface{}, 10)
 	m["detail"] = articleDetail
 	m["relative_article"] = relativeArticle
+	m["prev"] = prevArticle
+	m["next"] = nextArticle
+	m["category"] = allCategoryList
 
 	c.HTML(http.StatusOK, "views/detail.html", m)
 }

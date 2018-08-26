@@ -44,10 +44,3 @@ func GetCategoryById(id int64) (category *model.Category, err error) {
 	err = DB.Get(category, sqlstr, id)
 	return
 }
-
-func GetRelativeArticleByCategoryId(categoryId int64) (articleList []*model.RelativeArticle, err error) {
-
-	sqlstr := "select id, title from article where category_id=? limit 10"
-	err = DB.Select(&articleList, sqlstr, categoryId)
-	return
-}

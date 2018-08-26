@@ -87,3 +87,31 @@ func GetRelativeArticle(articleId int64) (articleList []*model.RelativeArticle, 
 	err = DB.Select(&articleList, sqlstr, categoryId, articleId)
 	return
 }
+
+func GetPrevArticleById(articleId int64) (info *model.RelativeArticle, err error) {
+
+	info = &model.RelativeArticle{
+		ArticleId: -1,
+	}
+	sqlstr := "select id, title from article where id < ? order by id desc limit 1"
+	err = DB.Get(info, sqlstr, articleId)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func GetNextArticleById(articleId int64) (info *model.RelativeArticle, err error) {
+
+	info = &model.RelativeArticle{
+		ArticleId: -1,
+	}
+	sqlstr := "select id, title from article where id > ? order by id asc limit 1"
+	err = DB.Get(info, sqlstr, articleId)
+	if err != nil {
+		return
+	}
+
+	return
+}

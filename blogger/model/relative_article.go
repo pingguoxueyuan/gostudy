@@ -1,6 +1,6 @@
 package model
 
 type RelativeArticle struct {
-	AritcleId int64  `db:"id"`
+	ArticleId int64  `db:"id"`
 	Title     string `db:"title"`
 }

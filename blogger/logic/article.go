@@ -87,6 +87,22 @@ func GetRelativeAricleList(articleId int64) (articleList []*model.RelativeArticl
 	return
 }
 
+func GetPrevAndNextArticleInfo(articleId int64) (prevArticle *model.RelativeArticle,
+	nextArticle *model.RelativeArticle, err error) {
+
+	prevArticle, err = db.GetPrevArticleById(articleId)
+	if err != nil {
+		//打印一个警告日志
+	}
+
+	nextArticle, err = db.GetNextArticleById(articleId)
+	if err != nil {
+		//打印一个警告日志
+	}
+
+	return
+}
+
 /*
 	content := c.PostForm("content")
 	author := c.PostForm("author")

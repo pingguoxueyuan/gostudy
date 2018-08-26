@@ -64,16 +64,26 @@ window.onload = function ()
     <div class="share"> </div>
     <div class="nextinfo">
       <p>上一篇：
-        <a href="/article/detail/?article_id=1">有些人，你永远不必等</a>
+        {{if eq .prev.ArticleId -1}}
+        没有上一篇文章了
+        {{else}}
+        <a href="/article/detail/?article_id={{.prev.ArticleId}}">{{.prev.Title}}</a>
+        {{end}}
       </p>
-      <p>下一篇：<a href="/news/life/">返回列表</a></p>
+      <p>下一篇：
+          {{if eq .next.ArticleId -1}}
+          没有下一篇文章了
+          {{else}}
+          <a href="/article/detail/?article_id={{.next.ArticleId}}">{{.next.Title}}</a>
+          {{end}}
+      </p>
     </div>
     <div class="otherlink">
       <h2>相关文章</h2>
       
       <ul>
         {{range .relative_article}}
-        <li><a href="/article/detail/?article_id={{.AritcleId}}" title="{{.Title}}">{{.Title}}</a></li>
+        <li><a href="/article/detail/?article_id={{.ArticleId}}" title="{{.Title}}">{{.Title}}</a></li>
         {{end}}
       </ul>
     </div>
@@ -91,12 +101,11 @@ window.onload = function ()
         <li><a href="#">关于我</a></li>
         <li><a href="list.html">学无止境</a>
           <ul>
-            <li><a href="list.html">学习笔记</a></li>
-            <li><a href="#">HTML5+CSS3</a></li>
-            <li><a href="#">网站建设</a></li>
+            {{range .category}}
+            <li><a href="/category/?category_id={{.CategoryId}}">{{.CategoryName}}</a></li>
+            {{end}}
           </ul>
         </li>
-        <li><a href="#">慢生活</a></li>
       </ul>
     </div>   
     <div class="weixin">
