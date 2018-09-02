@@ -9,6 +9,5 @@ type Leave struct {
 	Content    string    `db:"content"`
 	Username   string    `db:"username"`
 	CreateTime time.Time `db:"create_time"`
-	Email      int       `db:"email"`
-	ArticleId  int64     `db:"article_id"`
+	Email      string       `db:"email"`
 }

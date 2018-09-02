@@ -63,6 +63,47 @@ func GetArticleRecordList(pageNum, pageSize int) (articleRecordList []*model.Art
 	return
 }
 
+
+func GetArticleRecordListById(categoryId, pageNum, pageSize int) (articleRecordList []*model.ArticleRecord, err error) {
+	//1. 从数据库中，获取文章列表
+	articleInfoList, err := db.GetArticleListByCategoryId(categoryId, pageNum, pageSize)
+	if err != nil {
+		fmt.Printf("1 get article list failed, err:%v\n", err)
+		return
+	}
+
+	if len(articleInfoList) == 0 {
+		return
+	}
+
+	categoryIds := getCategoryIds(articleInfoList)
+	//2. 从数据库中，获取文章对应的分类列表
+	categoryList, err := db.GetCategoryList(categoryIds)
+	if err != nil {
+		fmt.Printf("2 get category list failed, err:%v\n", err)
+		return
+	}
+
+	//聚合数据
+	for _, article := range articleInfoList {
+		fmt.Printf("content:%s\n", article.Summary)
+		articleRecord := &model.ArticleRecord{
+			ArticleInfo: *article,
+		}
+		categoryId := article.CategoryId
+		for _, category := range categoryList {
+			if categoryId == category.CategoryId {
+				articleRecord.Category = *category
+				break
+			}
+		}
+		articleRecordList = append(articleRecordList, articleRecord)
+	}
+
+	return
+}
+
+
 func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err error) {
 
 	//1. 获取文章的信息

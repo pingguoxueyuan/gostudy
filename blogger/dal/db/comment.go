@@ -28,7 +28,7 @@ func InsertComment(comment *model.Comment) (err error) {
 
 	sqlstr := `insert 
 						into comment(
-							Content, Username, ArticleId					
+							content, username, article_id					
 						)
 					values (
 							?, ?, ?
@@ -86,6 +86,7 @@ func GetCommentList(articleId int64, pageNum, pageSize int) (commentList []*mode
 						where 
 							article_id = ? and 
 							status = 1
+						order by create_time desc
 						limit ?, ?`
 
 	err = DB.Select(&commentList, sqlstr, articleId, pageNum, pageSize)

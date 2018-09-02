@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	dns := "root:root@tcp(localhost:3306)/blogger?parseTime=true"
+	dns := "root:123456@tcp(localhost:3306)/blogger?parseTime=true"
 	err := Init(dns)
 	if err != nil {
 		panic(err)

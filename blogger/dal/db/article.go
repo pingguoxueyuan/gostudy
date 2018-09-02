@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -51,16 +52,40 @@ func GetArticleList(pageNum, pageSize int) (articleList []*model.ArticleInfo, er
 	return
 }
 
-func GetArticleDetail(articleId int64) (articleInfo *model.ArticleDetail, err error) {
+
+func GetArticleListByCategoryId(categoryId, pageNum, pageSize int) (articleList []*model.ArticleInfo, err error) {
+
+	if pageNum < 0 || pageSize < 0 {
+		err = fmt.Errorf("invalid parameter, page_num:%d, page_size:%d", pageNum, pageSize)
+		return
+	}
+
+	sqlstr := `select 
+						id, summary, title, view_count,
+						 create_time, comment_count, username, category_id
+					from 
+						article 
+					where 
+						status = 1
+						and
+						category_id = ?
+					order by create_time desc
+					limit ?, ?`
+
+	err = DB.Select(&articleList, sqlstr, categoryId, pageNum, pageSize)
+	return
+}
+
+func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err error) {
 
 	if articleId < 0 {
 		err = fmt.Errorf("invalid parameter,article_id:%d", articleId)
 		return
 	}
 
-	articleInfo = &model.ArticleDetail{}
+	articleDetail = &model.ArticleDetail{}
 	sqlstr := `select 
-							id, summary, title, view_count,content,
+							id, summary, title, view_count, content,
 							 create_time, comment_count, username, category_id
 						from 
 							article 
@@ -70,7 +95,8 @@ func GetArticleDetail(articleId int64) (articleInfo *model.ArticleDetail, err er
 							status = 1
 						`
 
-	err = DB.Get(articleInfo, sqlstr, articleId)
+	err = DB.Get(articleDetail, sqlstr, articleId)
+	fmt.Printf("article_info:%#v\n", articleDetail)
 	return
 }
 
@@ -113,5 +139,23 @@ func GetNextArticleById(articleId int64) (info *model.RelativeArticle, err error
 		return
 	}
 
+	return
+}
+
+func IsArticleExist(articleId int64) (exists bool, err error) {
+
+	var id int64
+	sqlstr := "select id from article where id=?"
+	err = DB.Get(&id, sqlstr, articleId)
+	if err == sql.ErrNoRows {
+		exists = false
+		return
+	}
+
+	if err != nil {
+		return
+	}
+
+	exists = true
 	return
 }

@@ -45,7 +45,7 @@ window.onload = function ()
 </header>
 <article>
   <div class="blogs">
-    {{range .}} 
+    {{range .article_list}} 
     <li> 
       <h3 class="blogtitle"><a href="/">{{.Title}}</a></h3>
       <div class="bloginfo">
@@ -82,18 +82,9 @@ window.onload = function ()
     <div class="cloud">
       <h2 class="hometitle">分类云</h2>
       <ul>
-        <a href="/">陌上花开</a> 
-        <a href="/">校园生活</a> 
-        <a href="/">html5</a> 
-        <a href="/">SumSung</a> 
-        <a href="/">青春</a> 
-        <a href="/">温暖</a>
-         <a href="/">阳光</a> 
-         <a href="/">三星</a>
-         <a href="/">索尼</a>
-          <a href="/">华维荣耀</a>
-           <a href="/">三星</a> 
-           <a href="/">索尼</a>
+        {{range .category_list}}
+        <a href="/category/?category_id={{.CategoryId}}">{{.CategoryName}}</a> 
+        {{end}}
       </ul>
     </div>
     <div class="paihang">
