@@ -9,7 +9,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	dns := "root:root@tcp(localhost:3306)/blogger?parseTime=true"
+	dns := "root:123456@tcp(localhost:3306)/blogger?parseTime=true"
 	err := db.Init(dns)
 	if err != nil {
 		panic(err)
@@ -33,5 +33,13 @@ func main() {
 	router.GET("/leave/new/", controller.LeaveNew)
 	//关于我页面
 	router.GET("/about/me/", controller.AboutMe)
+
+	//文章评论相关
+	router.POST("/comment/submit/", controller.CommentSubmit)
+
+	//留言相关
+	router.POST("/leave/submit/", controller.LeaveSubmit)
+	//分类下面的文章列表
+	router.GET("/category/", controller.CategoryList)
 	router.Run(":8080")
 }

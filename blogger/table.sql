@@ -29,7 +29,7 @@ CREATE TABLE `article`  (
   `view_count` int(255) UNSIGNED NOT NULL COMMENT '阅读次数',
   `comment_count` int(255) UNSIGNED NOT NULL COMMENT '评论次数',
   `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '作者',
-  `status` int(10) UNSIGNED NOT NULL COMMENT '状态',
+  `status` int(10) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
   `summary` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章摘要',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
@@ -40,10 +40,10 @@ CREATE TABLE `article`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for cateogry
+-- Table structure for category
 -- ----------------------------
-DROP TABLE IF EXISTS `cateogry`;
-CREATE TABLE `cateogry`  (
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '分类名字',
   `category_no` int(10) UNSIGNED NOT NULL COMMENT '分类排序',
@@ -53,14 +53,14 @@ CREATE TABLE `cateogry`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of cateogry
+-- Records of category
 -- ----------------------------
-INSERT INTO `cateogry` VALUES (1, 'css/html', 1, '2018-08-12 10:55:45', '2018-08-12 10:59:00');
-INSERT INTO `cateogry` VALUES (2, '后端开发', 2, '2018-08-12 10:56:07', '2018-08-12 10:59:03');
-INSERT INTO `cateogry` VALUES (3, 'Java开发', 3, '2018-08-12 10:56:16', '2018-08-12 10:59:05');
-INSERT INTO `cateogry` VALUES (4, 'C++开发', 4, '2018-08-12 10:56:24', '2018-08-12 10:59:08');
-INSERT INTO `cateogry` VALUES (5, '架构剖析', 5, '2018-08-12 10:56:36', '2018-08-12 10:59:10');
-INSERT INTO `cateogry` VALUES (6, 'Golang开发', 6, '2018-08-12 10:56:45', '2018-08-12 10:59:14');
+INSERT INTO `category` VALUES (1, 'css/html', 1, '2018-08-12 10:55:45', '2018-08-12 10:59:00');
+INSERT INTO `category` VALUES (2, '后端开发', 2, '2018-08-12 10:56:07', '2018-08-12 10:59:03');
+INSERT INTO `category` VALUES (3, 'Java开发', 3, '2018-08-12 10:56:16', '2018-08-12 10:59:05');
+INSERT INTO `category` VALUES (4, 'C++开发', 4, '2018-08-12 10:56:24', '2018-08-12 10:59:08');
+INSERT INTO `category` VALUES (5, '架构剖析', 5, '2018-08-12 10:56:36', '2018-08-12 10:59:10');
+INSERT INTO `category` VALUES (6, 'Golang开发', 6, '2018-08-12 10:56:45', '2018-08-12 10:59:14');
 
 -- ----------------------------
 -- Table structure for comment

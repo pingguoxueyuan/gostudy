@@ -49,28 +49,19 @@ window.onload = function ()
   </h1>
   <div class="ab_box">
       <div class="blogs">
+          {{range .}}
           <li> 
-            <h3 class="blogtitle">作者:</h3>
+            <h3 class="blogtitle">作者: {{.Username}}</h3>
             <div class="bloginfo">
-              <p>用最简单的代码，实现瀑布流布局，没有繁琐的css，没有jq，只需要做到以下就可以实现瀑布流的效果。思路很简单，看成是三列布局，分别用三个ul来调用。帝国cms列表模板，...</p>
+              <p>{{.Content}}</p>
             </div>
             <div class="autor">
               
-              <span class="dtime">2018-05-04</span>
+              <span class="dtime">{{.CreateTime}}</span>
         
-              <span class="readmore">邮箱</div>
+              <span class="readmore">{{.Email}}</div>
           </li>
-          <li> 
-              <h3 class="blogtitle">作者:</h3>
-              <div class="bloginfo">
-                <p>用最简单的代码，实现瀑布流布局，没有繁琐的css，没有jq，只需要做到以下就可以实现瀑布流的效果。思路很简单，看成是三列布局，分别用三个ul来调用。帝国cms列表模板，...</p>
-              </div>
-              <div class="autor">
-                
-                <span class="dtime">2018-05-04</span>
-          
-                <span class="readmore">邮箱</div>
-            </li>
+          {{end}}
       </div>
     <div class="leftbox">
       <div class="newsview">
@@ -80,11 +71,11 @@ window.onload = function ()
               
                 <div class="row">
                     <div class="register span6">
-                        <form action="" method="post">
+                        <form action="/leave/submit/" method="post">
         
                       <p class="comment-notes"><span id="email-notes">电子邮件地址不会被公开。</span> 必填项已用<span class="required">*</span>标注</p>
                       <p class="comment-form-comment">
-                        <div><label for="comment">评论*</label> </div>
+                        <div><label for="comment">留言*</label> </div>
                         <div><textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></div>
                       </p>
                       <p class="comment-form-author">
@@ -99,7 +90,7 @@ window.onload = function ()
                           </p>
                      
                   
-                      <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论"> <input type="hidden" name="comment_post_ID" value="2" id="comment_post_ID">
+                      <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表留言"> <input type="hidden" name="comment_post_ID" value="2" id="comment_post_ID">
                       <input type="hidden" name="comment_parent" id="comment_parent" value="0">
                       </p>
                         </form>

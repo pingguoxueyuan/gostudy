@@ -87,10 +87,65 @@ window.onload = function ()
         {{end}}
       </ul>
     </div>
+    <div>
+        <hr>
+        <h2>评论列表</h2>
+        {{range .comment_list}}
+        <li> 
+          <h3 class="blogtitle">作者:{{.Username}}</h3>
+          <div class="bloginfo">
+            <p>{{.Content}}</p>
+          </div>
+          <div class="autor">
+            
+            <span class="dtime">{{.CreateTime}}</span>
+        </li>
+        {{end}}
+    </div>
     <div class="news_pl">
       <h2>文章评论</h2>
+      
       <ul>
-        <div class="gbko"> </div>
+        <div class="gbko"> 
+          
+          <div class="newsview">
+            <div class="news_infos"> 
+                
+                <div class="register-container container">
+                  
+                    <div class="row">
+                        <div class="register span6">
+                            <form action="/comment/submit/" method="post">
+            
+                          <p class="comment-notes"><span id="email-notes">电子邮件地址不会被公开。</span> 必填项已用<span class="required">*</span>标注</p>
+                          <p class="comment-form-comment">
+                            <div><label for="comment">评论*</label> </div>
+                            <div><textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></div>
+                          </p>
+                          <p class="comment-form-author">
+                            <div><label for="author">姓名 <span class="required">*</span></label>
+                              </div><div>
+                                <input id="author" name="author" type="text" value="" size="30" maxlength="245" required="required">
+                              </div> </p>
+                          <p class="comment-form-email"><div><label for="email">电子邮件 <span class="required">*</span></label></div>
+                            <div>
+                               <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required="required">
+                               <input id="email" name="article_id" type="hidden" value="{{.article_id}}" size="30" maxlength="100" aria-describedby="email-notes" required="required">
+                              </div>
+                              </p>
+                         
+                      
+                          <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论"> <input type="hidden" name="comment_post_ID" value="2" id="comment_post_ID">
+                          <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+                          </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
       </ul>
     </div>
   </div>
