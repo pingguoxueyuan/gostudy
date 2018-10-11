@@ -249,6 +249,16 @@ func DFS(currentNode *BasicBlock, nodes []*UnionFindNode, number []int, last []i
 	return lastid
 }
 
+func appendUnique(x []int, v int) []int {
+	for _, i := range x {
+		if i == v {
+			return x
+		}
+	}
+	x = append(x, v)
+	return x
+}
+
 // FindLoops
 //
 // Find loops and build loop forest using Havlak's algorithm, which
@@ -263,7 +273,8 @@ func FindLoops(cfgraph *CFG, lsgraph *LSG) {
 
 	size := cfgraph.NumNodes()
 
-	nonBackPreds := make([]map[int]bool, size)
+	//nonBackPreds := make([]map[int]bool, size)
+	nonBackPreds := make([][]int, size)
 	backPreds := make([][]int, size)
 
 	number := make([]int, size)
@@ -281,9 +292,9 @@ func FindLoops(cfgraph *CFG, lsgraph *LSG) {
 	//   - depth-first traversal and numbering.
 	//   - unreached BB's are marked as dead.
 	//
-	for i, bb := range cfgraph.Blocks {
+	for _, bb := range cfgraph.Blocks {
 		number[bb.Name] = unvisited
-		nonBackPreds[i] = make(map[int]bool)
+		//nonBackPreds[i] = make(map[int]bool)
 	}
 
 	DFS(cfgraph.Start, nodes, number, last, 0)
@@ -318,7 +329,8 @@ func FindLoops(cfgraph *CFG, lsgraph *LSG) {
 				if isAncestor(w, v, last) {
 					backPreds[w] = append(backPreds[w], v)
 				} else {
-					nonBackPreds[w][v] = true
+					//nonBackPreds[w][v] = true
+					nonBackPreds[w] = appendUnique(nonBackPreds[w], v)
 				}
 			}
 		}
@@ -394,7 +406,8 @@ func FindLoops(cfgraph *CFG, lsgraph *LSG) {
 
 				if !isAncestor(w, ydash.dfsNumber, last) {
 					types[w] = bbIrreducible
-					nonBackPreds[w][ydash.dfsNumber] = true
+					///nonBackPreds[w][ydash.dfsNumber] = true
+					nonBackPreds[w] = appendUnique(nonBackPreds[w], ydash.dfsNumber)
 				} else {
 					if ydash.dfsNumber != w {
 						if !listContainsNode(nodePool, ydash) {

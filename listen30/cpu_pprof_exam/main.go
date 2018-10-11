@@ -15,6 +15,7 @@ func logicCode() {
 		case v := <-c:
 			fmt.Printf("read from chan, v:%v\n", v)
 		default:
+			time.Sleep(time.Second)
 		}
 	}
 }
@@ -40,7 +41,7 @@ func main() {
 	for i := 0; i < 8; i++ {
 		go logicCode()
 	}
-	time.Sleep(1 * time.Second)
+	time.Sleep(15 * time.Second)
 
 	if isMemPprof {
 		file, err := os.Create("./mem.pprof")
