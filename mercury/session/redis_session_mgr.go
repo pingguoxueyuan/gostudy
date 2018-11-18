@@ -90,3 +90,4 @@ func (r *RedisSessionMgr) Get(sessionId string) (session Session, err error) {
 	}
 	return
 }
+

@@ -3,6 +3,7 @@ package main
 import "github.com/gin-gonic/gin"
 
 func testHandle(c *gin.Context) {
+	c.Request.Cookie()
 	c.JSON(200, gin.H{
 		"message": "test",
 	})
