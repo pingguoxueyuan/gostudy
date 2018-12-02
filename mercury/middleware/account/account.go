@@ -2,19 +2,20 @@ package account
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pingguoxueyuan/gostudy/mercury/session"
 )
 
-func processRequest(ctx *gin.Context) {
+func ProcessRequest(ctx *gin.Context) {
 
 	var userSession session.Session
 
 	defer func() {
 		if userSession == nil {
-			userSession = session.CreateSession()
+			userSession, _ = session.CreateSession()
 		}
 
 		ctx.Set(MercurySessionName, userSession)
@@ -100,7 +101,7 @@ func IsLogin(ctx *gin.Context) (login bool) {
 	return
 }
 
-func processResponse(ctx *gin.Context) {
+func SetUserId(userId int64, ctx *gin.Context) {
 
 	var userSession session.Session
 	tempSession, exists := ctx.Get(MercurySessionName)
@@ -113,6 +114,31 @@ func processResponse(ctx *gin.Context) {
 		return
 	}
 
+	if userSession == nil {
+		return
+	}
+
+	userSession.Set(MercuryUserId, userId)
+}
+
+func ProcessResponse(ctx *gin.Context) {
+
+	var userSession session.Session
+	tempSession, exists := ctx.Get(MercurySessionName)
+	if !exists {
+		return
+	}
+
+	userSession, ok := tempSession.(session.Session)
+	if !ok {
+		return
+	}
+
+	if userSession == nil {
+		return
+	}
+
+	fmt.Printf("get session succ\n")
 	if userSession.IsModify() == false {
 		return
 	}
@@ -121,6 +147,7 @@ func processResponse(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
+	fmt.Printf("save session succ\n")
 
 	sessionId := userSession.Id()
 	cookie := &http.Cookie{
@@ -132,5 +159,6 @@ func processResponse(ctx *gin.Context) {
 	}
 
 	http.SetCookie(ctx.Writer, cookie)
+	fmt.Printf("set cookie  succ\n")
 	return
 }

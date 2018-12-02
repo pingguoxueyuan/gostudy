@@ -13,7 +13,7 @@ type MemorySessionMgr struct {
 
 func NewMemorySessionMgr() SessionMgr {
 	sr := &MemorySessionMgr{
-		sessionMap: make(map[string]session, 1024),
+		sessionMap: make(map[string]Session, 1024),
 	}
 
 	return sr

@@ -39,6 +39,7 @@ func (m *MemorySession) Set(key string, value interface{}) (err error) {
 	defer m.rwlock.Unlock()
 
 	m.data[key] = value
+	m.flag = SessionFlagModify
 	return
 }
 
@@ -59,6 +60,7 @@ func (m *MemorySession) Del(key string) (err error) {
 	m.rwlock.Lock()
 	defer m.rwlock.Unlock()
 
+	m.flag = SessionFlagModify
 	delete(m.data, key)
 	return
 }

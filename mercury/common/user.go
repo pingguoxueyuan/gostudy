@@ -1,7 +1,12 @@
 package common
 
+const (
+	UserSexMan   = 1
+	UserSexWomen = 2
+)
+
 type UserInfo struct {
-	UserId   uint64 `json:"user_id" db:"user_id"`
+	UserId   int64  `json:"user_id" db:"user_id"`
 	Nickname string `json:"nickname" db:"nickname"`
 	Sex      int    `json:"sex" db:"sex"`
 	Username string `json:"user" db:"username"`

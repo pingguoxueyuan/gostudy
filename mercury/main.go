@@ -6,6 +6,7 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/account"
 	"github.com/pingguoxueyuan/gostudy/mercury/dal/db"
 	"github.com/pingguoxueyuan/gostudy/mercury/id_gen"
+	maccount "github.com/pingguoxueyuan/gostudy/mercury/middleware/account"
 )
 
 func initTemplate(router *gin.Engine) {
@@ -27,10 +28,20 @@ func initDb() (err error) {
 	return
 }
 
+func initSession() (err error) {
+	err = maccount.InitSession("memory", "")
+	return
+}
+
 func main() {
 	router := gin.Default()
 
 	err := initDb()
+	if err != nil {
+		panic(err)
+	}
+
+	err = initSession()
 	if err != nil {
 		panic(err)
 	}
@@ -42,6 +53,7 @@ func main() {
 
 	ginpprof.Wrapper(router)
 	initTemplate(router)
-	router.POST("user/register", account.RegisterHandle)
+	router.POST("/api/user/register", account.RegisterHandle)
+	router.POST("/api/user/login", account.LoginHandle)
 	router.Run(":9090")
 }

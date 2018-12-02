@@ -5,19 +5,20 @@ import (
 	"time"
 
 	"github.com/garyburd/redigo/redis"
+	uuid "github.com/satori/go.uuid"
 )
 
 type RedisSessionMgr struct {
-	addr   string
-	passwd string
-	pool   *redis.Pool
-	rwlock sync.RWMutex
+	addr       string
+	passwd     string
+	pool       *redis.Pool
+	rwlock     sync.RWMutex
+	sessionMap map[string]Session
 }
-
 
 func NewRedisSessionMgr() SessionMgr {
 	sr := &RedisSessionMgr{
-		sessionMap: make(map[string]session, 1024),
+		sessionMap: make(map[string]Session, 1024),
 	}
 
 	return sr
@@ -63,8 +64,8 @@ func (r *RedisSessionMgr) Init(addr string, options ...string) (err error) {
 }
 
 func (r *RedisSessionMgr) CreateSession() (session Session, err error) {
-	s.rwlock.Lock()
-	defer s.rwlock.Unlock()
+	r.rwlock.Lock()
+	defer r.rwlock.Unlock()
 
 	id, err := uuid.NewV4()
 	if err != nil {
@@ -90,4 +91,3 @@ func (r *RedisSessionMgr) Get(sessionId string) (session Session, err error) {
 	}
 	return
 }
-
