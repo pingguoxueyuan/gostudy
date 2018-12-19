@@ -25,7 +25,8 @@ func LoginHandle(c *gin.Context) {
 		//用户登陆成功之后，需要把user_id设置到session当中
 		account.SetUserId(userInfo.UserId, c)
 		//当调用responseSuccess的时候，gin框架已经把数据发送给浏览器了
-		//所以在responseSuccess之后，SetCookie就不会生效
+		//所以在responseSuccess之后，SetCookie就不会生效。因此，account.ProcessResponse
+		//必须在util.ResponseSuccess之前调用
 		account.ProcessResponse(c)
 		util.ResponseSuccess(c, nil)
 	}()

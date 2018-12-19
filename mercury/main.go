@@ -29,6 +29,7 @@ func initDb() (err error) {
 }
 
 func initSession() (err error) {
+	//err = maccount.InitSession("redis", "localhost:6379")
 	err = maccount.InitSession("memory", "")
 	return
 }
