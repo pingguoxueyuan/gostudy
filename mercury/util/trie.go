@@ -1,5 +1,9 @@
 package util
 
+import (
+	"strings"
+)
+
 type Node struct {
 	//rune表示一个utf8字符
 	char   rune
@@ -28,8 +32,12 @@ func NewTrie() *Trie {
 	}
 }
 
+//假如我要把 敏感词： “我操”
+// Add("我操", nil)
+// Add("色情片", nil)
 func (p *Trie) Add(key string, data interface{}) (err error) {
 
+	key = strings.TrimSpace(key)
 	node := p.root
 	runes := []rune(key)
 	for _, r := range runes {
@@ -49,6 +57,7 @@ func (p *Trie) Add(key string, data interface{}) (err error) {
 	return
 }
 
+// findNode("色情片")
 func (p *Trie) findNode(key string) (result *Node) {
 
 	node := p.root
@@ -105,7 +114,9 @@ func (p *Trie) PrefixSearch(key string) (result []*Node) {
 	return
 }
 
-func (p *Trie) Check(text, replace string) (result bool, str string) {
+// text = "我们都喜欢王八蛋"
+// replace = "***"
+func (p *Trie) Check(text, replace string) (result string, hit bool) {
 
 	chars := []rune(text)
 	if p.root == nil {
@@ -126,7 +137,7 @@ func (p *Trie) Check(text, replace string) (result bool, str string) {
 
 		node = ret
 		if ret.term {
-			result = true
+			hit = true
 			node = p.root
 			left = append(left, ([]rune(replace))...)
 			start = index + 1
@@ -134,6 +145,6 @@ func (p *Trie) Check(text, replace string) (result bool, str string) {
 		}
 	}
 
-	str = string(left)
+	result = string(left)
 	return
 }
