@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/jmoiron/sqlx"
+
+	"github.com/pingguoxueyuan/gostudy/logger"
 	"github.com/pingguoxueyuan/gostudy/mercury/common"
 	"github.com/pingguoxueyuan/gostudy/mercury/util"
 )
@@ -56,6 +59,33 @@ func Login(user *common.UserInfo) (err error) {
 
 	if originPasswordSalt != user.Password {
 		err = ErrUserPasswordWrong
+		return
+	}
+
+	return
+}
+
+func GetUserInfoList(userIdList []int64) (userInfoList []*common.UserInfo, err error) {
+
+	sqlstr := `select 
+					user_id, nickname, sex, username, email
+				from 
+					user
+				where user_id in(?)`
+	var userIdTmpArr []interface{}
+	for _, userId := range userIdList {
+		userIdTmpArr = append(userIdTmpArr, userId)
+	}
+
+	query, args, err := sqlx.In(sqlstr, userIdTmpArr...)
+	if err != nil {
+		logger.Error("sqlx in failed, sqlstr:%v, user_ids:%#v, err:%v", sqlstr, userIdList, err)
+		return
+	}
+
+	err = DB.Select(&userInfoList, query, args...)
+	if err != nil {
+		logger.Error("get question list failed, err:%v", err)
 		return
 	}
 
