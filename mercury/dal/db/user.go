@@ -67,6 +67,9 @@ func Login(user *common.UserInfo) (err error) {
 
 func GetUserInfoList(userIdList []int64) (userInfoList []*common.UserInfo, err error) {
 
+	if len(userIdList) == 0 {
+		return
+	}
 	sqlstr := `select 
 					user_id, nickname, sex, username, email
 				from 
@@ -77,7 +80,7 @@ func GetUserInfoList(userIdList []int64) (userInfoList []*common.UserInfo, err e
 		userIdTmpArr = append(userIdTmpArr, userId)
 	}
 
-	query, args, err := sqlx.In(sqlstr, userIdTmpArr...)
+	query, args, err := sqlx.In(sqlstr, userIdTmpArr)
 	if err != nil {
 		logger.Error("sqlx in failed, sqlstr:%v, user_ids:%#v, err:%v", sqlstr, userIdList, err)
 		return
@@ -85,7 +88,7 @@ func GetUserInfoList(userIdList []int64) (userInfoList []*common.UserInfo, err e
 
 	err = DB.Select(&userInfoList, query, args...)
 	if err != nil {
-		logger.Error("get question list failed, err:%v", err)
+		logger.Error("get question list failed, query:%v, err:%v", query, err)
 		return
 	}
 

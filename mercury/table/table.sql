@@ -10,10 +10,34 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2019-01-01 23:04:41
+Date: 2019-01-12 11:07:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for answer
+-- ----------------------------
+DROP TABLE IF EXISTS `answer`;
+CREATE TABLE `answer` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `answer_id` bigint(20) unsigned NOT NULL,
+  `content` text COLLATE utf8mb4_general_ci NOT NULL,
+  `comment_count` int(10) unsigned NOT NULL,
+  `voteup_count` int(11) NOT NULL,
+  `author_id` bigint(20) NOT NULL,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `can_comment` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_answer_id` (`answer_id`),
+  KEY `idx_author_Id` (`author_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of answer
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for category
@@ -28,7 +52,7 @@ CREATE TABLE `category` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_category_id` (`category_id`),
   UNIQUE KEY `idx_category_name` (`category_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of category
@@ -37,6 +61,7 @@ INSERT INTO `category` VALUES ('1', '1', '技术', '2019-01-01 08:30:40', '2019-
 INSERT INTO `category` VALUES ('2', '2', '情感', '2019-01-01 08:31:07', '2019-01-01 08:31:07');
 INSERT INTO `category` VALUES ('3', '3', '王者荣耀', '2019-01-01 08:31:25', '2019-01-01 08:31:25');
 INSERT INTO `category` VALUES ('4', '4', '吃鸡', '2019-01-01 15:45:13', '2019-01-01 15:45:13');
+INSERT INTO `category` VALUES ('5', '5', '科幻', '2019-01-05 23:02:43', '2019-01-05 23:02:43');
 
 -- ----------------------------
 -- Table structure for question
@@ -56,12 +81,32 @@ CREATE TABLE `question` (
   KEY `idx_author_id` (`author_id`),
   KEY `idx_question_id` (`question_id`),
   KEY `idx_category_id` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of question
 -- ----------------------------
 INSERT INTO `question` VALUES ('1', '229544174527971329', '上岛咖啡斯拉夫斯卡就开始了是开始实施上课试试看是', '开始了打发时间浪费时间浪费多少反倒是浪费时间开放时间发生的雷锋精神离开房间是否是否', '224533709452214273', '1', '1', '2019-01-01 21:16:29', '2019-01-01 21:16:29');
+INSERT INTO `question` VALUES ('2', '230134441849126913', '未来三十年内，哪些行业的工作人员可能会被人工智能取代？', '人工智能这些年的快速发展，在某些领域已经开始渐渐取代人类的工作岗位了。未来这种情况是否会越来越严重？以后的人类会进入空虚的享乐时代么？', '224533709452214273', '1', '1', '2019-01-05 23:00:16', '2019-01-05 23:00:16');
+INSERT INTO `question` VALUES ('3', '230134511709454337', '你见过最渣的渣女有多渣？', '我一个玩的挺好的舍友，在一家旁边很多酒吧的电玩电玩城上班，酒吧多，帅哥，男生也就多了，喜欢她的男生就也还挺多的，她说她自己是个渣女，因为同时跟四五个男生暧昧，出去玩都是跟这个男生玩完，又去跟另一个男生玩。她长得一般，但身材可以，你们觉得她渣吗？\n\n\n', '224533709452214273', '1', '1', '2019-01-05 23:00:58', '2019-01-05 23:00:58');
+INSERT INTO `question` VALUES ('4', '230134710704013313', '你觉得《三体》中最残忍的一句话是什么？', '你觉得《三体》中最残忍的一句话是什么？', '224533709452214273', '5', '1', '2019-01-05 23:02:56', '2019-01-05 23:02:56');
+
+-- ----------------------------
+-- Table structure for question_answer_rel
+-- ----------------------------
+DROP TABLE IF EXISTS `question_answer_rel`;
+CREATE TABLE `question_answer_rel` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `question_id` bigint(20) NOT NULL,
+  `answer_id` bigint(20) NOT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_question_answer` (`question_id`,`answer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of question_answer_rel
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user

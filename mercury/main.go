@@ -5,8 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pingguoxueyuan/gostudy/logger"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/account"
-	"github.com/pingguoxueyuan/gostudy/mercury/controller/ask"
+	"github.com/pingguoxueyuan/gostudy/mercury/controller/answer"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/category"
+	"github.com/pingguoxueyuan/gostudy/mercury/controller/question"
 	"github.com/pingguoxueyuan/gostudy/mercury/dal/db"
 	"github.com/pingguoxueyuan/gostudy/mercury/filter"
 	"github.com/pingguoxueyuan/gostudy/mercury/id_gen"
@@ -80,7 +81,9 @@ func main() {
 	router.POST("/api/user/register", account.RegisterHandle)
 	router.POST("/api/user/login", account.LoginHandle)
 	router.GET("/api/category/list", category.GetCategoryListHandle)
-	router.POST("/api/ask/submit", maccount.AuthMiddleware, ask.QuestionSubmitHandle)
+	router.POST("/api/ask/submit", maccount.AuthMiddleware, question.QuestionSubmitHandle)
 	router.GET("/api/question/list", category.GetQuestionListHandle)
+	router.GET("/api/question/detail", question.QuestionDetailHandle)
+	router.GET("/api/answer/list", answer.AnswerListHandle)
 	router.Run(":9090")
 }

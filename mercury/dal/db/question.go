@@ -33,6 +33,24 @@ type Question struct {
 }
 */
 
+func GetQuestion(questionId int64) (question *common.Question, err error) {
+
+	question = &common.Question{}
+	sqlstr := `select 
+							question_id, caption, content, author_id, category_id, create_time
+						from 
+							question
+						where question_id=?`
+
+	err = DB.Get(question, sqlstr, questionId)
+	if err != nil {
+		logger.Error("get question  failed, err:%v", err)
+		return
+	}
+
+	return
+}
+
 func GetQuestionList(categoryId int64) (questionList []*common.Question, err error) {
 
 	sqlstr := `select 

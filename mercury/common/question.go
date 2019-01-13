@@ -19,3 +19,9 @@ type ApiQuestion struct {
 	Question
 	AuthorName string `json:"author_name"`
 }
+
+type ApiQuestionDetail struct {
+	Question
+	AuthorName   string `json:"author_name"`
+	CategoryName string `json:"category_name"`
+}

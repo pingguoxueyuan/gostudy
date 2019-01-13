@@ -1,6 +1,8 @@
-package ask
+package question
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/pingguoxueyuan/gostudy/logger"
 	"github.com/pingguoxueyuan/gostudy/mercury/common"
@@ -60,4 +62,58 @@ func QuestionSubmitHandle(c *gin.Context) {
 
 	logger.Debug("create question succ, question:%#v", question)
 	util.ResponseSuccess(c, nil)
+}
+
+func QuestionDetailHandle(c *gin.Context) {
+
+	questionIdStr, ok := c.GetQuery("question_id")
+	if !ok {
+		logger.Error("invalid question_id, not found question_id")
+		util.ResponseError(c, util.ErrCodeParameter)
+		return
+	}
+
+	questionId, err := strconv.ParseInt(questionIdStr, 10, 64)
+	if err != nil {
+		logger.Error("invalid question_id, strconv.ParseInt failed, err:%v, str:%v",
+			err, questionIdStr)
+		util.ResponseError(c, util.ErrCodeParameter)
+		return
+	}
+
+	question, err := db.GetQuestion(questionId)
+	if err != nil {
+		logger.Error("get question failed, err:%v, str:%v", err, questionIdStr)
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		return
+	}
+
+	categoryMap, err := db.MGetCategory([]int64{question.CategoryId})
+	if err != nil {
+		logger.Error("get category failed, err:%v, question:%v", err, question)
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		return
+	}
+
+	category, ok := categoryMap[question.CategoryId]
+	if !ok {
+		logger.Error("get category failed, err:%v, question:%v", err, question)
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		return
+	}
+
+	userInfoList, err := db.GetUserInfoList([]int64{question.AuthorId})
+	if err != nil || len(userInfoList) == 0 {
+		logger.Error("get user info list failed,user_ids:%#v, err:%v",
+			question.AuthorId, err)
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		return
+	}
+
+	apiQuestionDetail := &common.ApiQuestionDetail{}
+	apiQuestionDetail.Question = *question
+	apiQuestionDetail.AuthorName = userInfoList[0].Username
+	apiQuestionDetail.CategoryName = category.CategoryName
+
+	util.ResponseSuccess(c, apiQuestionDetail)
 }
