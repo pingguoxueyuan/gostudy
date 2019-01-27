@@ -7,6 +7,7 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/account"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/answer"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/category"
+	"github.com/pingguoxueyuan/gostudy/mercury/controller/comment"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/question"
 	"github.com/pingguoxueyuan/gostudy/mercury/dal/db"
 	"github.com/pingguoxueyuan/gostudy/mercury/filter"
@@ -85,5 +86,10 @@ func main() {
 	router.GET("/api/question/list", category.GetQuestionListHandle)
 	router.GET("/api/question/detail", question.QuestionDetailHandle)
 	router.GET("/api/answer/list", answer.AnswerListHandle)
+
+	//评论模块
+	//commentGroup := router.Group("/api/comment/", maccount.AuthMiddleware)
+	commentGroup := router.Group("/api/comment/")
+	commentGroup.POST("/post_comment", comment.PostCommentHandle)
 	router.Run(":9090")
 }
