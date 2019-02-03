@@ -6,6 +6,7 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/common"
 	"github.com/pingguoxueyuan/gostudy/mercury/dal/db"
 	"github.com/pingguoxueyuan/gostudy/mercury/id_gen"
+	"github.com/pingguoxueyuan/gostudy/mercury/middleware/account"
 	"github.com/pingguoxueyuan/gostudy/mercury/util"
 
 	"html"
@@ -32,7 +33,7 @@ func PostCommentHandle(c *gin.Context) {
 		return
 	}
 
-	userId := int64(121233) //account.GetUserId(c)
+	userId, err := account.GetUserId(c)
 	if err != nil || userId == 0 {
 		util.ResponseError(c, util.ErrCodeNotLogin)
 		return
