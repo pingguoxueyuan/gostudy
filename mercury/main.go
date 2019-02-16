@@ -8,6 +8,7 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/answer"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/category"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/comment"
+	"github.com/pingguoxueyuan/gostudy/mercury/controller/favorite"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/question"
 	"github.com/pingguoxueyuan/gostudy/mercury/dal/db"
 	"github.com/pingguoxueyuan/gostudy/mercury/filter"
@@ -94,5 +95,14 @@ func main() {
 	commentGroup.POST("/post_reply", comment.PostReplyHandle)
 	commentGroup.GET("/list", comment.CommentListHandle)
 	commentGroup.GET("/reply_list", comment.ReplyListHandle)
+	commentGroup.POST("/like", comment.LikeHandle)
+
+	//收藏模块路由
+	favoriteGroup := router.Group("/api/favorite/")
+	favoriteGroup.POST("/add_dir", favorite.AddDirHandle)
+	favoriteGroup.POST("/add", favorite.AddFavoriteHandle)
+	favoriteGroup.GET("/dir_list", favorite.DirListHandle)
+	favoriteGroup.GET("/list", favorite.FavoriteListHandle)
+
 	router.Run(":9090")
 }

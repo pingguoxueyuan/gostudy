@@ -10,6 +10,7 @@ const (
 	ErrCodeCaptionHit        = 1006
 	ErrCodeContentHit        = 1007
 	ErrCodeNotLogin          = 1008
+	ErrCodeRecordExist       = 1009
 )
 
 func GetMessage(code int) (message string) {
@@ -32,6 +33,8 @@ func GetMessage(code int) (message string) {
 		message = "内容中含有非法内容，请修改后发表"
 	case ErrCodeNotLogin:
 		message = "用户未登录"
+	case ErrCodeRecordExist:
+		message = "记录已经存在"
 	default:
 		message = "未知错误"
 	}

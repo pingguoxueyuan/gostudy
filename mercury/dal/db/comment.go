@@ -63,6 +63,13 @@ func CreateReplyComment(comment *common.Comment) (err error) {
 		return
 	}
 
+	sqlstr = `update comment set comment_count=comment_count+1 where comment_id=?`
+	_, err = tx.Exec(sqlstr, comment.ParentId)
+	if err != nil {
+		logger.Error("update comment count failed, comment:%#v err:%v", comment, err)
+		tx.Rollback()
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		logger.Error("commit comment failed, comment:%#v err:%v", comment, err)
@@ -107,6 +114,14 @@ func CreatePostComment(comment *common.Comment) (err error) {
 		comment.QuestionId, comment.ReplyAuthorId)
 	if err != nil {
 		logger.Error("insert comment failed, comment:%#v err:%v", comment, err)
+		tx.Rollback()
+		return
+	}
+
+	sqlstr = `update answer set comment_count = comment_count+1 where answer_id=?`
+	_, err = tx.Exec(sqlstr, comment.QuestionId)
+	if err != nil {
+		logger.Error("update answer comment count failed, comment:%#v err:%v", comment, err)
 		tx.Rollback()
 		return
 	}
@@ -209,6 +224,20 @@ func GetReplyList(commentId int64, offset, limit int64) (commentList []*common.C
 	err = DB.Get(&count, sqlstr, commentId)
 	if err != nil {
 		logger.Error("query comment count failed, answer_id:%v err:%v", commentId, err)
+		return
+	}
+
+	return
+}
+
+func UpdateCommentLikeCount(commentId int64) (err error) {
+
+	sqlstr := `update comment set like_count=like_count+1
+								where comment_id=?`
+
+	_, err = DB.Exec(sqlstr, commentId)
+	if err != nil {
+		logger.Error("UpdateCommentLikeCount failed, err:%v", err)
 		return
 	}
 
