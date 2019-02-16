@@ -16,6 +16,54 @@ const (
 	MinCommentContentSize = 10
 )
 
+func PostReplyHandle(c *gin.Context) {
+	var comment common.Comment
+	err := c.BindJSON(&comment)
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeParameter)
+		return
+	}
+
+	logger.Debug("bind json succ, comment:%#v", comment)
+	if len(comment.Content) <= MinCommentContentSize || comment.QuestionId == 0 ||
+		comment.ReplyCommentId == 0 || comment.ParentId == 0 {
+		util.ResponseError(c, util.ErrCodeParameter)
+		logger.Error("len(comment.content) :%v, qid:%v， invalid param",
+			len(comment.Content), comment.QuestionId)
+		return
+	}
+
+	var userId int64 = 100 /*
+		userId, err := account.GetUserId(c)
+		if err != nil || userId == 0 {
+			util.ResponseError(c, util.ErrCodeNotLogin)
+			return
+		}*/
+
+	comment.AuthorId = userId
+	//1. 针对content做一个转义，防止xss漏洞
+	comment.Content = html.EscapeString(comment.Content)
+
+	//2. 生成评论的id
+	cid, err := id_gen.GetId()
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		logger.Error("id_gen.GetId failed, comment:%#v, err:%v", comment, err)
+		return
+	}
+
+	//3. 根据ReplyCommentId，查询这个ReplyCommentId的author_id，也就是ReplyAuthorId
+	comment.CommentId = int64(cid)
+	err = db.CreateReplyComment(&comment)
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		logger.Error("CreatePostComment failed, comment:%#v, err:%v", comment, err)
+		return
+	}
+
+	util.ResponseSuccess(c, nil)
+}
+
 func PostCommentHandle(c *gin.Context) {
 
 	var comment common.Comment

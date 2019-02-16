@@ -91,5 +91,6 @@ func main() {
 	//commentGroup := router.Group("/api/comment/", maccount.AuthMiddleware)
 	commentGroup := router.Group("/api/comment/")
 	commentGroup.POST("/post_comment", comment.PostCommentHandle)
+	commentGroup.POST("/post_reply", comment.PostReplyHandle)
 	router.Run(":9090")
 }
