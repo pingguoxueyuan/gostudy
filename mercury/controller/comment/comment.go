@@ -10,6 +10,8 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/util"
 
 	"html"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -108,4 +110,191 @@ func PostCommentHandle(c *gin.Context) {
 	}
 
 	util.ResponseSuccess(c, nil)
+}
+
+func CommentListHandle(c *gin.Context) {
+
+	//解析answer_id
+	answerIdStr, ok := c.GetQuery("answer_id")
+	answerIdStr = strings.TrimSpace(answerIdStr)
+	if ok == false || len(answerIdStr) == 0 {
+		util.ResponseError(c, util.ErrCodeParameter)
+		logger.Error("valid answer id, val:%v", answerIdStr)
+		return
+	}
+	answerId, err := strconv.ParseInt(answerIdStr, 10, 64)
+	if err != nil || answerId == 0 {
+		util.ResponseError(c, util.ErrCodeParameter)
+		logger.Error("valid answer id, val:%v", answerIdStr)
+		return
+	}
+	logger.Debug("get query answer_id succ, val:%v", answerIdStr)
+
+	//解析offset
+	var offset int64
+	offsetStr, ok := c.GetQuery("offset")
+	offsetStr = strings.TrimSpace(offsetStr)
+	if ok == false || len(offsetStr) == 0 {
+		offset = 0
+		logger.Error("invalid offset, val:%v", offsetStr)
+	}
+	offset, err = strconv.ParseInt(offsetStr, 10, 64)
+	if err != nil {
+		offset = 0
+		logger.Error("invalid offset, val:%v", offsetStr)
+	}
+	logger.Debug("get query offset succ, val:%v", offsetStr)
+
+	var limit int64
+	limitStr, ok := c.GetQuery("limit")
+	limitStr = strings.TrimSpace(limitStr)
+	if ok == false || len(limitStr) == 0 {
+		limit = 10
+		logger.Error("valid limit, val:%v", limitStr)
+	}
+
+	logger.Debug("get query limit succ, val:%v", limitStr)
+
+	limit, err = strconv.ParseInt(limitStr, 10, 64)
+	if err != nil || limit == 0 {
+		limit = 10
+		logger.Error("valid limit, val:%v", limitStr)
+	}
+	logger.Debug("get query limit succ, val:%v", limitStr)
+
+	//获取一级评论列表
+	commentList, count, err := db.GetCommentList(answerId, offset, limit)
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		logger.Error("GetCommentList failed, answer_id:%v  err:%v", answerId, err)
+		return
+	}
+
+	var userIdList []int64
+	for _, v := range commentList {
+		userIdList = append(userIdList, v.AuthorId, v.ReplyAuthorId)
+	}
+
+	userList, err := db.GetUserInfoList(userIdList)
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		logger.Error("GetUserInfoList failed, answer_id:%v  err:%v", answerId, err)
+		return
+	}
+
+	userInfoMap := make(map[int64]*common.UserInfo, len(userIdList))
+	for _, user := range userList {
+		userInfoMap[user.UserId] = user
+	}
+
+	for _, v := range commentList {
+		user, ok := userInfoMap[v.AuthorId]
+		if ok {
+			v.AuthorName = user.Username
+		}
+
+		user, ok = userInfoMap[v.ReplyAuthorId]
+		if ok {
+			v.ReplyAuthorName = user.Username
+		}
+	}
+
+	var apiCommentList = &common.ApiCommentList{}
+	apiCommentList.Count = count
+	apiCommentList.CommentList = commentList
+
+	util.ResponseSuccess(c, apiCommentList)
+}
+
+func ReplyListHandle(c *gin.Context) {
+
+	//解析comment_id
+	commentIdStr, ok := c.GetQuery("comment_id")
+	commentIdStr = strings.TrimSpace(commentIdStr)
+	if ok == false || len(commentIdStr) == 0 {
+		util.ResponseError(c, util.ErrCodeParameter)
+		logger.Error("valid comment id, val:%v", commentIdStr)
+		return
+	}
+	commentId, err := strconv.ParseInt(commentIdStr, 10, 64)
+	if err != nil || commentId == 0 {
+		util.ResponseError(c, util.ErrCodeParameter)
+		logger.Error("valid comment id, val:%v", commentId)
+		return
+	}
+	logger.Debug("get query commentIdStr succ, val:%v", commentIdStr)
+
+	//解析offset
+	var offset int64
+	offsetStr, ok := c.GetQuery("offset")
+	offsetStr = strings.TrimSpace(offsetStr)
+	if ok == false || len(offsetStr) == 0 {
+		offset = 0
+		logger.Error("invalid offset, val:%v", offsetStr)
+	}
+	offset, err = strconv.ParseInt(offsetStr, 10, 64)
+	if err != nil {
+		offset = 0
+		logger.Error("invalid offset, val:%v", offsetStr)
+	}
+	logger.Debug("get query offset succ, val:%v", offsetStr)
+
+	var limit int64
+	limitStr, ok := c.GetQuery("limit")
+	limitStr = strings.TrimSpace(limitStr)
+	if ok == false || len(limitStr) == 0 {
+		limit = 10
+		logger.Error("valid limit, val:%v", limitStr)
+	}
+
+	logger.Debug("get query limit succ, val:%v", limitStr)
+
+	limit, err = strconv.ParseInt(limitStr, 10, 64)
+	if err != nil || limit == 0 {
+		limit = 10
+		logger.Error("valid limit, val:%v", limitStr)
+	}
+
+	//获取回复列表
+	commentList, count, err := db.GetReplyList(commentId, offset, limit)
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		logger.Error("GetCommentList failed, commentId:%v  err:%v", commentId, err)
+		return
+	}
+
+	var userIdList []int64
+	for _, v := range commentList {
+		userIdList = append(userIdList, v.AuthorId, v.ReplyAuthorId)
+	}
+
+	userList, err := db.GetUserInfoList(userIdList)
+	if err != nil {
+		util.ResponseError(c, util.ErrCodeServerBusy)
+		logger.Error("GetUserInfoList failed, answer_id:%v  err:%v", commentId, err)
+		return
+	}
+
+	userInfoMap := make(map[int64]*common.UserInfo, len(userIdList))
+	for _, user := range userList {
+		userInfoMap[user.UserId] = user
+	}
+
+	for _, v := range commentList {
+		user, ok := userInfoMap[v.AuthorId]
+		if ok {
+			v.AuthorName = user.Username
+		}
+
+		user, ok = userInfoMap[v.ReplyAuthorId]
+		if ok {
+			v.ReplyAuthorName = user.Username
+		}
+	}
+
+	var apiCommentList = &common.ApiCommentList{}
+	apiCommentList.Count = count
+	apiCommentList.CommentList = commentList
+
+	util.ResponseSuccess(c, apiCommentList)
 }

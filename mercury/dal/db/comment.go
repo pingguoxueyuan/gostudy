@@ -3,6 +3,8 @@ package db
 import (
 	"fmt"
 
+	"github.com/jmoiron/sqlx"
+
 	"github.com/pingguoxueyuan/gostudy/logger"
 	"github.com/pingguoxueyuan/gostudy/mercury/common"
 )
@@ -113,6 +115,100 @@ func CreatePostComment(comment *common.Comment) (err error) {
 	if err != nil {
 		logger.Error("commit comment failed, comment:%#v err:%v", comment, err)
 		tx.Rollback()
+		return
+	}
+
+	return
+}
+
+func GetCommentList(answerId int64, offset, limit int64) (commentList []*common.Comment, count int64, err error) {
+
+	var commentIdList []int64
+	sqlstr := `select comment_id from comment_rel where question_id=? and level=1 limit ?, ?`
+	err = DB.Select(&commentIdList, sqlstr, answerId, offset, limit)
+	if err != nil {
+		logger.Error("query comment list failed, answer_id:%v err:%v", answerId, err)
+		return
+	}
+
+	if len(commentIdList) == 0 {
+		return
+	}
+
+	sqlstr = `select 
+				comment_id, content, author_id, like_count, comment_count,
+				create_time
+			from comment where comment_id in (?)`
+	var tmpList []interface{}
+	for _, val := range commentIdList {
+		tmpList = append(tmpList, val)
+	}
+
+	sqlstr, paramList, err := sqlx.In(sqlstr, tmpList)
+	if err != nil {
+		logger.Error("sqlx  in failed, answer_id:%v err:%v", answerId, err)
+		return
+	}
+
+	err = DB.Select(&commentList, sqlstr, paramList...)
+	if err != nil {
+		logger.Error("sql.select failed, answer_id:%v err:%v", answerId, err)
+		return
+	}
+
+	//查询总的记录条数
+	sqlstr = `select count(comment_id) from comment_rel where question_id=? and level=1`
+	err = DB.Get(&count, sqlstr, answerId)
+	if err != nil {
+		logger.Error("query comment count failed, answer_id:%v err:%v", answerId, err)
+		return
+	}
+
+	return
+}
+
+func GetReplyList(commentId int64, offset, limit int64) (commentList []*common.Comment, count int64, err error) {
+
+	var commentIdList []int64
+	sqlstr := `select comment_id from comment_rel where parent_id=? and level=2 limit ?, ?`
+	err = DB.Select(&commentIdList, sqlstr, commentId, offset, limit)
+	if err != nil {
+		logger.Error("query comment list failed, commentId:%v err:%v", commentId, err)
+		return
+	}
+
+	logger.Debug("get comment list sql:%v, offset:%v limit:%v", sqlstr, offset, limit)
+	if len(commentIdList) == 0 {
+		return
+	}
+
+	sqlstr = `select 
+					comment_id, content, author_id, like_count, comment_count,
+					create_time
+				from comment where comment_id in (?)`
+	var tmpList []interface{}
+	for _, val := range commentIdList {
+		tmpList = append(tmpList, val)
+	}
+
+	sqlstr2, paramList, err := sqlx.In(sqlstr, tmpList)
+	if err != nil {
+		logger.Error("sqlx  in failed, answer_id:%v err:%v", commentId, err)
+		return
+	}
+
+	logger.Debug("sqlstr %v, param list:%v", sqlstr2, paramList)
+	err = DB.Select(&commentList, sqlstr2, paramList...)
+	if err != nil {
+		logger.Error("sql.select failed, answer_id:%v err:%v", commentId, err)
+		return
+	}
+
+	//查询总的记录条数
+	sqlstr = `select count(comment_id) from comment_rel where parent_id=? and level=2`
+	err = DB.Get(&count, sqlstr, commentId)
+	if err != nil {
+		logger.Error("query comment count failed, answer_id:%v err:%v", commentId, err)
 		return
 	}
 

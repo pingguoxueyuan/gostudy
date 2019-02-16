@@ -92,5 +92,7 @@ func main() {
 	commentGroup := router.Group("/api/comment/")
 	commentGroup.POST("/post_comment", comment.PostCommentHandle)
 	commentGroup.POST("/post_reply", comment.PostReplyHandle)
+	commentGroup.GET("/list", comment.CommentListHandle)
+	commentGroup.GET("/reply_list", comment.ReplyListHandle)
 	router.Run(":9090")
 }
