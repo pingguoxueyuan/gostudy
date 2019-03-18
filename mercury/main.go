@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/DeanThompson/ginpprof"
+
+	"github.com/Shopify/sarama"
 	"github.com/gin-gonic/gin"
 	"github.com/pingguoxueyuan/gostudy/logger"
 	"github.com/pingguoxueyuan/gostudy/mercury/controller/account"
@@ -14,6 +16,7 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/filter"
 	"github.com/pingguoxueyuan/gostudy/mercury/id_gen"
 	maccount "github.com/pingguoxueyuan/gostudy/mercury/middleware/account"
+	"github.com/pingguoxueyuan/gostudy/mercury/util"
 )
 
 func initTemplate(router *gin.Engine) {
@@ -76,6 +79,19 @@ func main() {
 	err = id_gen.Init(1)
 	if err != nil {
 		panic(err)
+	}
+
+	err = util.InitKafka("localhost:9092")
+	if err != nil {
+		panic(err)
+	}
+	err = util.InitKafkaConsumer("localhost:9092", "mercury_topic",
+		func(message *sarama.ConsumerMessage) {
+			logger.Debug("receive from kafka, msg:%#v", message)
+		})
+	if err != nil {
+		panic(err)
+		return
 	}
 
 	ginpprof.Wrapper(router)

@@ -62,6 +62,7 @@ func QuestionSubmitHandle(c *gin.Context) {
 
 	logger.Debug("create question succ, question:%#v", question)
 	util.ResponseSuccess(c, nil)
+	util.SendKafka("mercury_topic", question)
 }
 
 func QuestionDetailHandle(c *gin.Context) {
