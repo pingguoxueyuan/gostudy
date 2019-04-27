@@ -14,11 +14,12 @@ type Answer struct {
 	CanComment   int32     `json:"can_comment" db:"can_comment"`
 	CreateTime   time.Time `json:"create_time" db:"create_time"`
 	UpdateTime   time.Time `json:"update_time" db:"update_time"`
+	QuestionId   string    `json:"question_id"`
 }
 
 type ApiAnswer struct {
 	Answer
-	AuthorName string `json:"answer_name" db:"answer_name"`
+	AuthorName string `json:"author_name" db:"author_name"`
 }
 
 type ApiAnswerList struct {

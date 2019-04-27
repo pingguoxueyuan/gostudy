@@ -34,8 +34,8 @@ func GetMessage(code int) (message string) {
 	case ErrCodeNotLogin:
 		message = "用户未登录"
 	case ErrCodeRecordExist:
-		message = "记录已经存在"
 	default:
+		message = "记录已经存在"
 		message = "未知错误"
 	}
 	return

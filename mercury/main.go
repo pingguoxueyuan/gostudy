@@ -103,10 +103,11 @@ func main() {
 	router.GET("/api/question/list", category.GetQuestionListHandle)
 	router.GET("/api/question/detail", question.QuestionDetailHandle)
 	router.GET("/api/answer/list", answer.AnswerListHandle)
+	router.POST("/api/answer/commit", maccount.AuthMiddleware, answer.AnswerCommitHandle)
 
 	//评论模块
-	//commentGroup := router.Group("/api/comment/", maccount.AuthMiddleware)
-	commentGroup := router.Group("/api/comment/")
+	commentGroup := router.Group("/api/comment/", maccount.AuthMiddleware)
+	//commentGroup := router.Group("/api/comment/")
 	commentGroup.POST("/post_comment", comment.PostCommentHandle)
 	commentGroup.POST("/post_reply", comment.PostReplyHandle)
 	commentGroup.GET("/list", comment.CommentListHandle)

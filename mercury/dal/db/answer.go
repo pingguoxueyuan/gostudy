@@ -6,13 +6,44 @@ import (
 	"github.com/pingguoxueyuan/gostudy/mercury/common"
 )
 
+func CreateAnswer(answer *common.Answer, questionId int64) (err error) {
+
+	sqlstr := `insert into answer(
+					 answer_id,   content, author_id)
+				   values(?,?,?)`
+
+	tx, err := DB.Begin()
+	if err != nil {
+		return
+	}
+
+	_, err = tx.Exec(sqlstr, answer.AnswerId, answer.Content,
+		answer.AuthorId)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("create answer failed, question:%#v, err:%v", answer, err)
+		return
+	}
+
+	sqlstr = `insert into question_answer_rel(question_id, answer_id)values(?,?)`
+	_, err = tx.Exec(sqlstr, questionId, answer.AnswerId)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("insert into question_answer_rel failed, err:%v", err)
+		return
+	}
+
+	tx.Commit()
+	return
+}
+
 func GetAnswerIdList(questionId int64, offset, limit int64) (answerIdList []int64, err error) {
 
 	sqlstr := `select 
 						answer_id
 					from 
 						question_answer_rel
-					where question_id=?
+					where question_id=? order by id desc
 					limit ?, ?`
 
 	err = DB.Select(&answerIdList, sqlstr, questionId, offset, limit)

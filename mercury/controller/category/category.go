@@ -1,6 +1,7 @@
 package category
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -78,6 +79,8 @@ func GetQuestionListHandle(c *gin.Context) {
 	for _, question := range questionList {
 		var apiQuestion = &common.ApiQuestion{}
 		apiQuestion.Question = *question
+		apiQuestion.QuestionIdStr = fmt.Sprintf("%d", apiQuestion.QuestionId)
+		apiQuestion.AuthorIdStr = fmt.Sprintf("%d", apiQuestion.AuthorId)
 		apiQuestion.CreateTimeStr = apiQuestion.CreateTime.Format("2006/1/2 15:04:05")
 
 		for _, userInfo := range userInfoList {

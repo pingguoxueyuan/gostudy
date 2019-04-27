@@ -17,9 +17,11 @@ func lazyHandler(w http.ResponseWriter, req *http.Request) {
 	a(ctx)
 	ranNum := rand.Intn(2)
 	if ranNum == 0 {
+
 		time.Sleep(6 * time.Second)
 		fmt.Fprintf(w, "slow response, %d\n", ranNum)
 		fmt.Printf("slow response, %d\n", ranNum)
+
 		return
 	}
 

@@ -22,6 +22,7 @@ func PostReplyHandle(c *gin.Context) {
 	var comment common.Comment
 	err := c.BindJSON(&comment)
 	if err != nil {
+		logger.Error("bind json failed, err:%v", err)
 		util.ResponseError(c, util.ErrCodeParameter)
 		return
 	}
@@ -71,10 +72,12 @@ func PostCommentHandle(c *gin.Context) {
 	var comment common.Comment
 	err := c.BindJSON(&comment)
 	if err != nil {
+		logger.Error("bind json failed, err:%v", err)
 		util.ResponseError(c, util.ErrCodeParameter)
 		return
 	}
 
+	comment.QuestionId, err = strconv.ParseInt(comment.QuestionIdStr, 10, 64)
 	logger.Debug("bind json succ, comment:%#v", comment)
 	if len(comment.Content) <= MinCommentContentSize || comment.QuestionId == 0 {
 		util.ResponseError(c, util.ErrCodeParameter)
@@ -85,6 +88,7 @@ func PostCommentHandle(c *gin.Context) {
 
 	userId, err := account.GetUserId(c)
 	if err != nil || userId == 0 {
+		logger.Error("get user id failed, err:%v", err)
 		util.ResponseError(c, util.ErrCodeNotLogin)
 		return
 	}
